@@ -22,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'no_telp',
+        'no_identitas',
+        'foto',
         'role',
     ];
 
@@ -51,5 +54,10 @@ class User extends Authenticatable
     public function borrowings()
     {
         return $this->hasMany(Borrowing::class, 'borrower_id');
+    }
+
+    public function peminjamans()
+    {
+        return $this->hasMany(Peminjaman::class);
     }
 }

@@ -3,30 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Book;
-use App\Models\Borrowing;
-use App\Models\Fine;
+use App\Models\Buku;
+use App\Models\Peminjaman;
+use App\Models\Denda;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalBooks = Book::count();
+        $totalBooks = Buku::count();
 
-        $totalBorrowings = Borrowing::count();
+        $totalBorrowings = Peminjaman::count();
 
-        $totalFine = Fine::sum('total_fine');
+        $totalFine = Denda::sum('total_denda');
 
-        $averageFine = Fine::avg('total_fine');
+        $averageFine = Denda::avg('total_denda');
 
-        $maxFine = Fine::max('total_fine');
+        $maxFine = Denda::max('total_denda');
 
-        $minFine = Fine::min('total_fine');
+        $minFine = Denda::min('total_denda');
 
-        $monthlyFines = Fine::selectRaw('
+        $monthlyFines = Denda::selectRaw('
             MONTH(created_at) as month,
-            SUM(total_fine) as total
+            SUM(total_denda) as total
         ')->groupBy('month')->orderBy('month')->get();
 
         return Inertia::render('Dashboard', [

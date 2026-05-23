@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('dendas', function (Blueprint $table) {
             $table->id();
-
-            $table->string('title');
-            $table->string('author');
-            $table->string('publisher');
-
-            $table->year('publish_year');
-
-            $table->integer('stock')->default(0);
-
+            $table->foreignId('detail_peminjaman_id')->constrained('detail_peminjamans')->onDelete('cascade');
+            $table->integer('jumlah_hari_terlambat');
+            $table->decimal('total_denda');
+            $table->enum('status_pembayaran', ['belum_bayar', 'lunas'])->default('belum_bayar');
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::dropIfExists('dendas');
     }
 };

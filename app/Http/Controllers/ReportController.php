@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fine;
+use App\Models\Denda;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\FinesExport;
+use App\Exports\DendasExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
     public function exportPdf()
     {
-        $fines = Fine::with('borrowing.borrower')->get();
+        $dendas = Denda::with('detailPeminjaman.peminjaman.user')->get();
 
         $pdf = Pdf::loadView(
             'reports.fines-pdf',
             [
-                'fines' => $fines
+                'dendas' => $dendas
             ]
         );
 
@@ -26,7 +26,7 @@ class ReportController extends Controller
     public function exportExcel()
     {
         return Excel::download(
-            new FinesExport,
+            new DendasExport,
             'laporan-denda.xlsx'
         );
     }
