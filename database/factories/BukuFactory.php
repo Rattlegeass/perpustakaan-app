@@ -31,6 +31,7 @@ class BukuFactory extends Factory
             'tahun_terbit' => fake()->numberBetween(1990, (int)date('Y')),
             'stok' => fake()->numberBetween(1, 20),
             'kategori' => fake()->randomElement(['fiksi', 'non-fiksi']),
+            'sinopsis' => fake()->paragraph(3),
             'cover' => null,
         ];
     }

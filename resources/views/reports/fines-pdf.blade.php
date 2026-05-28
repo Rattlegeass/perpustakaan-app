@@ -2,36 +2,46 @@
 <html>
 <head>
     <title>Laporan Denda</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; }
+        th { background-color: #0B3A60; color: white; }
+    </style>
 </head>
 <body>
 
-    <h1>Laporan Denda</h1>
+    <h1>Laporan Denda Perpustakaan</h1>
+    <p>Tanggal: {{ date('d-m-Y H:i') }}</p>
 
-    <table border="1" width="100%" cellpadding="5">
-
+    <table>
         <tr>
-            <th>Peminjam</th>
-            <th>Hari Telat</th>
-            <th>Total Denda</th>
+            <th>No</th>
+            <th>Nama Peminjam</th>
+            <th>Email</th>
+            <th>Judul Buku</th>
+            <th>Status Pembayaran</th>
+            <th>Jumlah Denda</th>
         </tr>
 
-        @foreach($fines as $fine)
+        @forelse($dendas as $index => $denda)
 
         <tr>
-            <td>
-                {{ $fine->borrowing->borrower->name }}
-            </td>
-
-            <td>
-                {{ $fine->late_days }}
-            </td>
-
-            <td>
-                Rp {{ $fine->total_fine }}
-            </td>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $denda->detailPeminjaman->peminjaman->user->name }}</td>
+            <td>{{ $denda->detailPeminjaman->peminjaman->user->email }}</td>
+            <td>{{ $denda->detailPeminjaman->buku->judul }}</td>
+            <td>{{ ucfirst(str_replace('_', ' ', $denda->status_pembayaran)) }}</td>
+            <td>Rp {{ number_format($denda->jumlah_denda, 0, ',', '.') }}</td>
         </tr>
 
-        @endforeach
+        @empty
+
+        <tr>
+            <td colspan="6" style="text-align: center;">Tidak ada data denda</td>
+        </tr>
+
+        @endforelse
 
     </table>
 

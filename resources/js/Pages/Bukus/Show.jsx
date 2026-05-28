@@ -1,3 +1,4 @@
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Link, router } from '@inertiajs/react';
 
 export default function Show({ buku }) {
@@ -8,77 +9,87 @@ export default function Show({ buku }) {
     };
 
     return (
-        <div className="p-6 max-w-2xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">{buku.judul}</h1>
-                <Link
-                    href="/bukus"
-                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                >
-                    Kembali
-                </Link>
-            </div>
+        <AuthenticatedLayout header={buku.judul}>
+            <div className="max-w-4xl mx-auto px-4 py-8">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
+                        {/* Cover */}
+                        <div>
+                            {buku.cover ? (
+                                <img src={buku.cover} alt={buku.judul} className="w-full rounded-xl object-cover shadow-md" />
+                            ) : (
+                                <div className="w-full aspect-[2/3] rounded-xl bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center text-4xl">
+                                    📚
+                                </div>
+                            )}
+                        </div>
 
-            <div className="bg-white p-6 rounded shadow">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        {buku.cover && (
-                            <div className="bg-gray-200 h-64 rounded flex items-center justify-center mb-4">
-                                <img src={buku.cover} alt={buku.judul} className="h-full object-cover rounded" />
+                        {/* Details */}
+                        <div className="md:col-span-2 space-y-6">
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Penulis</p>
+                                <p className="text-2xl font-bold text-slate-800">{buku.penulis}</p>
                             </div>
-                        )}
+
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Penerbit</p>
+                                <p className="text-lg font-semibold text-slate-800">{buku.penerbit}</p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                <div>
+                                    <p className="text-slate-600 text-sm font-semibold uppercase">Tahun Terbit</p>
+                                    <p className="text-lg font-semibold text-slate-800">{buku.tahun_terbit}</p>
+                                </div>
+                                <div>
+                                    <p className="text-slate-600 text-sm font-semibold uppercase">Kategori</p>
+                                    <span className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 font-semibold text-sm">{buku.kategori}</span>
+                                </div>
+                            </div>
+
+                            <div className="border-t-2 border-slate-200 pt-6">
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Stok Tersedia</p>
+                                <p className={`text-4xl font-bold mt-2 ${
+                                    buku.stok > 5 ? 'text-green-600' : 
+                                    buku.stok > 0 ? 'text-amber-600' : 
+                                    'text-red-600'
+                                }`}>
+                                    {buku.stok}
+                                </p>
+                            </div>
+
+                            <div className="flex gap-3 pt-4">
+                                <a
+                                    href={`/bukus/${buku.id}/edit`}
+                                    className="flex-1 text-center bg-amber-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-amber-600 transition"
+                                >
+                                    Edit
+                                </a>
+                                <button
+                                    onClick={handleDelete}
+                                    className="flex-1 bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition"
+                                >
+                                    Hapus
+                                </button>
+                                <Link
+                                    href="/bukus"
+                                    className="flex-1 text-center bg-slate-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-600 transition"
+                                >
+                                    Kembali
+                                </Link>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="space-y-4">
-                        <div>
-                            <p className="text-gray-600 text-sm">Penulis</p>
-                            <p className="font-semibold text-lg">{buku.penulis}</p>
+                    {/* Sinopsis */}
+                    {buku.sinopsis && (
+                        <div className="border-t-2 border-slate-200 p-8">
+                            <h2 className="text-xl font-bold text-slate-800 mb-4">Sinopsis</h2>
+                            <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{buku.sinopsis}</p>
                         </div>
-
-                        <div>
-                            <p className="text-gray-600 text-sm">Penerbit</p>
-                            <p className="font-semibold">{buku.penerbit}</p>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="text-gray-600 text-sm">Tahun Terbit</p>
-                                <p className="font-semibold">{buku.tahun_terbit}</p>
-                            </div>
-                            <div>
-                                <p className="text-gray-600 text-sm">Kategori</p>
-                                <p className="font-semibold">{buku.kategori}</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p className="text-gray-600 text-sm">Stok Tersedia</p>
-                            <p className={`font-bold text-2xl ${
-                                buku.stok > 5 ? 'text-green-600' : 
-                                buku.stok > 0 ? 'text-yellow-600' : 
-                                'text-red-600'
-                            }`}>
-                                {buku.stok} eksemplar
-                            </p>
-                        </div>
-
-                        <div className="pt-4 flex gap-2">
-                            <a
-                                href={`/bukus/${buku.id}/edit`}
-                                className="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600"
-                            >
-                                Edit
-                            </a>
-                            <button
-                                onClick={handleDelete}
-                                className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
-                            >
-                                Hapus
-                            </button>
-                        </div>
-                    </div>
+                    )}
                 </div>
             </div>
-        </div>
+        </AuthenticatedLayout>
     );
 }

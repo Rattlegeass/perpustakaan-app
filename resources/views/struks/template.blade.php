@@ -62,25 +62,30 @@
             border-left: 3px solid #000;
         }
         
-        .row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 5px 0;
+        }
+        
+        .info-table td {
+            padding: 6px 0;
             font-size: 12px;
             border-bottom: 1px dotted #ccc;
-            padding-bottom: 5px;
+            vertical-align: middle;
         }
         
-        .label {
+        .info-label {
             font-weight: bold;
-            width: 45%;
             color: #333;
+            text-align: left;
+            width: 40%;
         }
         
-        .value {
-            width: 50%;
-            text-align: right;
+        .info-value {
             color: #000;
+            text-align: right;
+            width: 60%;
         }
         
         .separator {
@@ -185,68 +190,82 @@
 
         <!-- Bagian 1: Data Peminjam -->
         <div class="section">
-            <div class="section-title">📋 DATA PEMINJAM</div>
-            <div class="row">
-                <span class="label">Nama:</span>
-                <span class="value">{{ $peminjaman->user->name }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Email:</span>
-                <span class="value">{{ $peminjaman->user->email }}</span>
-            </div>
-            <div class="row">
-                <span class="label">No. Telepon:</span>
-                <span class="value">{{ $peminjaman->user->no_telp ?? '-' }}</span>
-            </div>
-            <div class="row">
-                <span class="label">No. Identitas:</span>
-                <span class="value">{{ $peminjaman->user->no_identitas ?? '-' }}</span>
-            </div>
+            <div class="section-title">DATA PEMINJAM</div>
+            <table class="info-table">
+                <tr>
+                    <td class="info-label">Nama:</td>
+                    <td class="info-value">{{ $peminjaman->user->name }}</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Email:</td>
+                    <td class="info-value">{{ $peminjaman->user->email }}</td>
+                </tr>
+                <tr>
+                    <td class="info-label">No. Telepon:</td>
+                    <td class="info-value">{{ $peminjaman->user->no_telp ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td class="info-label">No. Identitas:</td>
+                    <td class="info-value">{{ $peminjaman->user->no_identitas ?? '-' }}</td>
+                </tr>
+            </table>
         </div>
 
         <div class="separator"></div>
 
         <!-- Bagian 2: Data Peminjaman -->
         <div class="section">
-            <div class="section-title">📅 DATA PEMINJAMAN</div>
-            <div class="row">
-                <span class="label">Tanggal Peminjaman:</span>
-                <span class="value">{{ $peminjaman->tgl_peminjaman }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Batas Pengembalian:</span>
-                <span class="value">{{ $peminjaman->batas_tgl_peminjaman }}</span>
-            </div>
-            <div class="row">
-                <span class="label">Status:</span>
-                <span class="value">
-                    @if($peminjaman->status_peminjaman === 'dipinjam')
-                        <strong style="color: #ff6b6b;">SEDANG DIPINJAM</strong>
-                    @elseif($peminjaman->status_peminjaman === 'selesai')
-                        <strong style="color: #51cf66;">SELESAI</strong>
-                    @else
-                        {{ ucfirst($peminjaman->status_peminjaman) }}
-                    @endif
-                </span>
-            </div>
-            <div class="row">
-                <span class="label">Total Item:</span>
-                <span class="value">{{ $peminjaman->detailPeminjaman->count() }} Buku</span>
-            </div>
+            <div class="section-title">DATA PEMINJAMAN</div>
+            <table class="info-table">
+                <tr>
+                    <td class="info-label">Tanggal Peminjaman:</td>
+                    <td class="info-value">
+                        {{ $peminjaman->tgl_peminjaman ? \Carbon\Carbon::parse($peminjaman->tgl_peminjaman)->format('d-m-Y') : '-' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="info-label">Batas Pengembalian:</td>
+                    <td class="info-value">
+                        {{ $peminjaman->batas_tgl_peminjaman ? \Carbon\Carbon::parse($peminjaman->batas_tgl_peminjaman)->format('d-m-Y') : '-' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="info-label">Status:</td>
+                    <td class="info-value">
+                        @if($peminjaman->status_peminjaman === 'dipinjam')
+                            <strong style="color: #ff6b6b;">SEDANG DIPINJAM</strong>
+                        @elseif($peminjaman->status_peminjaman === 'dikembalikan')
+                            <strong style="color: #51cf66;">SELESAI / DIKEMBALIKAN</strong>
+                        @elseif($peminjaman->status_peminjaman === 'terlambat')
+                            <strong style="color: #fa5252;">TERLAMBAT</strong>
+                        @elseif($peminjaman->status_peminjaman === 'menunggu_pengambilan')
+                            <strong style="color: #ff922b;">MENUNGGU PENGAMBILAN</strong>
+                        @elseif($peminjaman->status_peminjaman === 'menunggu_persetujuan')
+                            <strong style="color: #4dabf7;">MENUNGGU PERSETUJUAN</strong>
+                        @else
+                            <strong>{{ strtoupper($peminjaman->status_peminjaman) }}</strong>
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td class="info-label">Total Item:</td>
+                    <td class="info-value">{{ $peminjaman->detailPeminjaman->count() }} Buku</td>
+                </tr>
+            </table>
         </div>
 
         <div class="separator"></div>
 
         <!-- Bagian 3: Daftar Buku yang Dipinjam -->
         <div class="section">
-            <div class="section-title">📚 BUKU YANG DIPINJAM</div>
+            <div class="section-title">BUKU YANG DIPINJAM</div>
             <table>
                 <thead>
                     <tr>
                         <th style="width: 8%;">No</th>
-                        <th style="width: 35%;">Judul Buku</th>
-                        <th style="width: 30%;">Penulis</th>
-                        <th style="width: 27%;">Status</th>
+                        <th style="width: 32%;">Judul Buku</th>
+                        <th style="width: 25%;">Penulis</th>
+                        <th style="width: 35%;">Status & Info Pengembalian</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -260,6 +279,24 @@
                                     <span style="color: #ff6b6b; font-weight: bold;">Dipinjam</span>
                                 @elseif($detail->status_buku === 'dikembalikan')
                                     <span style="color: #51cf66; font-weight: bold;">Dikembalikan</span>
+                                    @if($detail->tgl_pengembalian)
+                                        <div style="font-size: 10px; color: #666; margin-top: 2px;">
+                                            Tgl: {{ \Carbon\Carbon::parse($detail->tgl_pengembalian)->format('d-m-Y') }}
+                                        </div>
+                                    @endif
+                                    @if($detail->catatan_kondisi)
+                                        <div style="font-size: 10px; color: #666; font-style: italic; margin-top: 1px;">
+                                            Kondisi: "{{ $detail->catatan_kondisi }}"
+                                        </div>
+                                    @endif
+                                    @if($detail->dendas && $detail->dendas->count() > 0)
+                                        @foreach($detail->dendas as $denda)
+                                            <div style="font-size: 10px; color: #fa5252; font-weight: bold; margin-top: 2px;">
+                                                Denda: Rp {{ number_format($denda->jumlah_denda, 0, ',', '.') }}
+                                                ({{ $denda->status_pembayaran === 'lunas' ? 'Lunas' : 'Belum Bayar' }})
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 @elseif($detail->status_buku === 'hilang')
                                     <span style="color: #fa5252; font-weight: bold;">Hilang</span>
                                 @elseif($detail->status_buku === 'rusak')
@@ -277,9 +314,9 @@
         </div>
 
         <!-- Warning Jika Belum Dikembalikan -->
-        @if($peminjaman->status_peminjaman === 'dipinjam')
+        @if($peminjaman->status_peminjaman === 'dipinjam' || $peminjaman->status_peminjaman === 'terlambat')
             <div class="warning">
-                ⚠️ <strong>Penting:</strong> Pastikan untuk mengembalikan semua buku sebelum tanggal batas pengembalian. Keterlambatan akan dikenakan denda.
+                <strong>Penting:</strong> Pastikan untuk mengembalikan semua buku sebelum tanggal batas pengembalian. Keterlambatan akan dikenakan denda.
             </div>
         @endif
 

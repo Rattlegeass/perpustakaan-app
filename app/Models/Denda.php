@@ -9,7 +9,7 @@ class Denda extends Model
     protected $fillable = [
         'detail_peminjaman_id',
         'jumlah_hari_terlambat',
-        'total_denda',
+        'jumlah_denda',
         'status_pembayaran',
     ];
 

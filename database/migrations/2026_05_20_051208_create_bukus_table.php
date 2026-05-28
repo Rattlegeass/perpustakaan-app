@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('tahun_terbit');
             $table->integer('stok');
             $table->enum('kategori', ['fiksi', 'non-fiksi'])->default('non-fiksi');
+            $table->text('sinopsis');
             $table->string('cover')->nullable();
             $table->timestamps();
         });

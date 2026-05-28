@@ -16,17 +16,17 @@ class DashboardController extends Controller
 
         $totalBorrowings = Peminjaman::count();
 
-        $totalFine = Denda::sum('total_denda');
+        $totalFine = Denda::sum('jumlah_denda');
 
-        $averageFine = Denda::avg('total_denda');
+        $averageFine = Denda::avg('jumlah_denda');
 
-        $maxFine = Denda::max('total_denda');
+        $maxFine = Denda::max('jumlah_denda');
 
-        $minFine = Denda::min('total_denda');
+        $minFine = Denda::min('jumlah_denda');
 
         $monthlyFines = Denda::selectRaw('
             MONTH(created_at) as month,
-            SUM(total_denda) as total
+            SUM(jumlah_denda) as total
         ')->groupBy('month')->orderBy('month')->get();
 
         return Inertia::render('Dashboard', [

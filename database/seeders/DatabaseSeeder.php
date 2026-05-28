@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             'tahun_terbit' => 2019,
             'stok' => 10,
             'kategori' => 'fiksi',
+            'sinopsis' => 'Bulan adalah sebuah novel fiksi ilmiah yang menceritakan tentang seorang anak bernama Raib yang memiliki kemampuan istimewa. Dalam petualangannya di kehidupan paralel, Raib belajar tentang arti persahabatan, keberanian, dan tanggung jawab. Cerita yang memikat dengan fantasi yang indah dan pesan moral yang mendalam.',
         ]);
 
         Buku::factory()->create([
@@ -51,6 +52,7 @@ class DatabaseSeeder extends Seeder
             'tahun_terbit' => 2005,
             'stok' => 5,
             'kategori' => 'fiksi',
+            'sinopsis' => 'Laskar Pelangi adalah kisah inspiratif tentang sepuluh anak muda dari keluarga yang kurang mampu di Belitung. Dengan determinasi dan semangat yang luar biasa, mereka berjuang mengenyam pendidikan meski penuh keterbatasan. Novel ini mengajarkan tentang kekuatan mimpi dan pentingnya pendidikan dalam mengubah nasib.',
         ]);
 
         Buku::factory()->create([
@@ -59,6 +61,8 @@ class DatabaseSeeder extends Seeder
             'penerbit' => 'Gramedia Pustaka Utama',
             'tahun_terbit' => 2019,
             'stok' => 8,
+            'kategori' => 'non-fiksi',
+            'sinopsis' => 'Filosofi Teras menggabungkan kebijaksanaan Stoisme kuno dengan kehidupan modern. Buku ini mengajarkan cara menghadapi tantangan hidup dengan tenang dan bijak, serta bagaimana menemukan kebahagiaan sejati melalui pemahaman diri yang lebih dalam. Cocok untuk mereka yang mencari kedamaian batin.',
         ]);
     }
 }

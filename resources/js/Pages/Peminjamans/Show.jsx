@@ -1,13 +1,19 @@
-import { Link } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Link, usePage, router } from '@inertiajs/react';
+import { formatDate, formatDateTime } from '@/Utils/dateFormatter';
 
 export default function Show({ peminjaman }) {
     const getStatusColor = (status) => {
         switch(status) {
-            case 'active':
+            case 'menunggu_persetujuan':
+                return 'bg-yellow-100 text-yellow-800';
+            case 'menunggu_pengambilan':
+                return 'bg-orange-100 text-orange-800';
+            case 'dipinjam':
                 return 'bg-blue-100 text-blue-800';
-            case 'returned':
+            case 'dikembalikan':
                 return 'bg-green-100 text-green-800';
-            case 'overdue':
+            case 'terlambat':
                 return 'bg-red-100 text-red-800';
             default:
                 return 'bg-gray-100 text-gray-800';
@@ -16,80 +22,93 @@ export default function Show({ peminjaman }) {
 
     const getStatusLabel = (status) => {
         switch(status) {
-            case 'active':
-                return 'Sedang Dipinjam';
-            case 'returned':
-                return 'Sudah Dikembalikan';
-            case 'overdue':
-                return 'Terlambat';
+            case 'menunggu_persetujuan':
+                return '⏳ Menunggu Persetujuan Admin';
+            case 'menunggu_pengambilan':
+                return '📦 Siap Diambil';
+            case 'dipinjam':
+                return '📖 Sedang Dipinjam';
+            case 'dikembalikan':
+                return '✅ Sudah Dikembalikan';
+            case 'terlambat':
+                return '⏰ Terlambat';
             default:
                 return status;
         }
     };
 
-    const daysLeft = Math.ceil(
-        (new Date(peminjaman.batas_tgl_peminjaman) - new Date()) / (1000 * 60 * 60 * 24)
-    );
+    const daysLeft = peminjaman.batas_tgl_peminjaman ? 
+        Math.ceil(
+            (new Date(peminjaman.batas_tgl_peminjaman) - new Date()) / (1000 * 60 * 60 * 24)
+        ) : 
+        null;
+
+    const allDendas = peminjaman.detail_peminjaman?.reduce((acc, detail) => {
+        if (detail.dendas && detail.dendas.length > 0) {
+            detail.dendas.forEach(denda => {
+                acc.push({
+                    ...denda,
+                    buku: detail.buku
+                });
+            });
+        }
+        return acc;
+    }, []) || [];
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">Detail Peminjaman</h1>
-                <Link
-                    href="/peminjamans"
-                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                >
-                    Kembali
-                </Link>
-            </div>
+        <AuthenticatedLayout header="Detail Peminjaman">
+            <div className="max-w-5xl mx-auto px-4 py-8">
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                {/* User Info */}
-                <div className="bg-white p-6 rounded shadow">
-                    <h2 className="text-lg font-bold mb-4">Informasi User</h2>
-                    <div className="space-y-3">
-                        <div>
-                            <p className="text-gray-600 text-sm">Nama</p>
-                            <p className="font-semibold">{peminjaman.user?.name}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">Email</p>
-                            <p className="font-semibold">{peminjaman.user?.email}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">No. Telp</p>
-                            <p className="font-semibold">{peminjaman.user?.no_telp || '-'}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">No. Identitas</p>
-                            <p className="font-semibold">{peminjaman.user?.no_identitas || '-'}</p>
+            <div className="space-y-6">
+                {/* Info Cards - User & Status */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* User Info */}
+                    <div className="bg-white rounded-2xl shadow-lg p-8">
+                        <h2 className="text-lg font-bold text-slate-800 mb-6">👤 Informasi Member</h2>
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Nama</p>
+                                <p className="font-bold text-slate-800">{peminjaman.user?.name}</p>
+                            </div>
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Email</p>
+                                <p className="font-mono text-slate-800">{peminjaman.user?.email}</p>
+                            </div>
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">No. Telp</p>
+                                <p className="font-semibold text-slate-800">{peminjaman.user?.no_telp || '-'}</p>
+                            </div>
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">No. Identitas</p>
+                                <p className="font-semibold text-slate-800">{peminjaman.user?.no_identitas || '-'}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Peminjaman Status */}
-                <div className="bg-white p-6 rounded shadow">
-                    <h2 className="text-lg font-bold mb-4">Status Peminjaman</h2>
-                    <div className="space-y-3">
-                        <div>
-                            <p className="text-gray-600 text-sm">Status</p>
-                            <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(peminjaman.status_peminjaman)}`}>
-                                {getStatusLabel(peminjaman.status_peminjaman)}
-                            </span>
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">Tanggal Pinjam</p>
-                            <p className="font-semibold">{peminjaman.tgl_peminjaman}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">Batas Pengembalian</p>
-                            <p className="font-semibold">{peminjaman.batas_tgl_peminjaman}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-600 text-sm">Sisa Waktu</p>
-                            <p className={`font-semibold ${daysLeft < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                                {daysLeft < 0 ? `Terlambat ${Math.abs(daysLeft)} hari` : `${daysLeft} hari`}
-                            </p>
+                    {/* Status Peminjaman */}
+                    <div className="bg-white rounded-2xl shadow-lg p-8">
+                        <h2 className="text-lg font-bold text-slate-800 mb-6">📋 Status Peminjaman</h2>
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Status</p>
+                                <span className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${getStatusColor(peminjaman.status_peminjaman)}`}>{ peminjaman.status_peminjaman }</span>
+                            </div>
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Tgl Pinjam</p>
+                                <p className="font-semibold text-slate-800">{formatDate(peminjaman.tgl_peminjaman)}</p>
+                            </div>
+                            <div>
+                                <p className="text-slate-600 text-sm font-semibold uppercase">Batas Kembali</p>
+                                <p className="font-semibold text-slate-800">{peminjaman.batas_tgl_peminjaman ? formatDate(peminjaman.batas_tgl_peminjaman) : '⏳ Menunggu Persetujuan'}</p>
+                            </div>
+                            {peminjaman.batas_tgl_peminjaman && (
+                                <div>
+                                    <p className="text-slate-600 text-sm font-semibold uppercase">Sisa Waktu</p>
+                                <p className={`font-bold text-lg ${daysLeft < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                    {daysLeft < 0 ? `⏰ ${Math.abs(daysLeft)} hari terlambat` : `✅ ${daysLeft} hari lagi`}
+                                </p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -97,17 +116,17 @@ export default function Show({ peminjaman }) {
 
             {/* Struk */}
             {peminjaman.struk && (
-                <div className="bg-white p-6 rounded shadow mb-6">
-                    <h2 className="text-lg font-bold mb-4">Bukti Peminjaman</h2>
-                    <div className="bg-blue-50 p-4 rounded border border-blue-200">
-                        <p className="text-gray-600 text-sm">Nomor Struk</p>
-                        <p className="font-mono text-lg font-bold">{peminjaman.struk.no_struk}</p>
-                        <p className="text-gray-600 text-sm mt-2">Dibuat pada</p>
-                        <p className="font-semibold">{new Date(peminjaman.struk.jam_dibuat).toLocaleString('id-ID')}</p>
-                        <div className="mt-4 flex gap-3">
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                    <h2 className="text-lg font-bold text-slate-800 mb-6">📄 Bukti Peminjaman (Struk)</h2>
+                    <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                        <p className="text-slate-600 text-sm font-semibold uppercase">Nomor Struk</p>
+                        <p className="font-mono text-xl font-bold text-slate-800 mb-4">{peminjaman.struk.no_struk}</p>
+                        <p className="text-slate-600 text-sm font-semibold uppercase">Dibuat pada</p>
+                        <p className="font-semibold text-slate-800 mb-4">{formatDateTime(peminjaman.struk.jam_dibuat)}</p>
+                        <div className="flex gap-3 flex-wrap">
                             <a 
                                 href={`/struks/${peminjaman.struk.id}/download`}
-                                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 inline-block"
+                                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition inline-block"
                             >
                                 📥 Download PDF
                             </a>
@@ -115,7 +134,7 @@ export default function Show({ peminjaman }) {
                                 href={`/struks/${peminjaman.struk.id}/preview`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 inline-block"
+                                className="px-6 py-2.5 bg-slate-600 text-white rounded-lg font-semibold hover:bg-slate-700 transition inline-block"
                             >
                                 👁️ Lihat Preview
                             </a>
@@ -125,35 +144,35 @@ export default function Show({ peminjaman }) {
             )}
 
             {/* Books Borrowed */}
-            <div className="bg-white p-6 rounded shadow">
-                <h2 className="text-lg font-bold mb-4">Buku yang Dipinjam</h2>
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+                <h2 className="text-lg font-bold text-slate-800 mb-6">📚 Buku yang Dipinjam</h2>
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-gray-200 border-b">
+                        <thead className="bg-slate-100 border-b-2 border-slate-200">
                             <tr>
-                                <th className="border p-3 text-left">No</th>
-                                <th className="border p-3 text-left">Judul</th>
-                                <th className="border p-3 text-left">Penulis</th>
-                                <th className="border p-3 text-left">Penerbit</th>
-                                <th className="border p-3 text-left">Status Buku</th>
-                                <th className="border p-3 text-left">Catatan</th>
+                                <th className="px-4 py-3 text-left font-bold text-slate-800">No</th>
+                                <th className="px-4 py-3 text-left font-bold text-slate-800">Judul</th>
+                                <th className="px-4 py-3 text-left font-bold text-slate-800">Penulis</th>
+                                <th className="px-4 py-3 text-left font-bold text-slate-800">Penerbit</th>
+                                <th className="px-4 py-3 text-left font-bold text-slate-800">Status</th>
+                                <th className="px-4 py-3 text-left font-bold text-slate-800">Catatan</th>
                             </tr>
                         </thead>
                         <tbody>
                             {peminjaman.detail_peminjaman?.map((detail, idx) => (
-                                <tr key={detail.id} className="hover:bg-gray-50">
-                                    <td className="border p-3">{idx + 1}</td>
-                                    <td className="border p-3 font-semibold">{detail.buku?.judul}</td>
-                                    <td className="border p-3">{detail.buku?.penulis}</td>
-                                    <td className="border p-3">{detail.buku?.penerbit}</td>
-                                    <td className="border p-3">
-                                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                <tr key={detail.id} className="border-b border-slate-200 hover:bg-slate-50 transition">
+                                    <td className="px-4 py-3 text-slate-700">{idx + 1}</td>
+                                    <td className="px-4 py-3 font-semibold text-slate-800">{detail.buku?.judul}</td>
+                                    <td className="px-4 py-3 text-slate-700">{detail.buku?.penulis}</td>
+                                    <td className="px-4 py-3 text-slate-700">{detail.buku?.penerbit}</td>
+                                    <td className="px-4 py-3">
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold inline-block ${
                                             detail.status_buku === 'dikembalikan' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
                                         }`}>
-                                            {detail.status_buku}
+                                            {detail.status_buku === 'dikembalikan' ? '✅ Dikembalikan' : '📖 Dipinjam'}
                                         </span>
                                     </td>
-                                    <td className="border p-3">{detail.condition_notes || '-'}</td>
+                                    <td className="px-4 py-3 text-slate-700">{detail.catatan_kondisi || '-'}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -162,27 +181,32 @@ export default function Show({ peminjaman }) {
             </div>
 
             {/* Denda */}
-            {peminjaman.detail_peminjaman?.[0]?.dendas?.length > 0 && (
-                <div className="bg-white p-6 rounded shadow mt-6">
-                    <h2 className="text-lg font-bold mb-4">Denda</h2>
+            {allDendas.length > 0 && (
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                    <h2 className="text-lg font-bold text-slate-800 mb-6">💰 Laporan Denda</h2>
                     <div className="space-y-4">
-                        {peminjaman.detail_peminjaman?.[0]?.dendas?.map((denda, idx) => (
-                            <div key={denda.id} className="bg-red-50 border border-red-200 p-4 rounded">
-                                <div className="flex justify-between items-start">
+                        {allDendas.map((denda) => (
+                            <div key={denda.id} className="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
+                                <div className="mb-4 pb-2 border-b border-red-200/50">
+                                    <p className="text-xs text-red-800 font-bold uppercase tracking-wider">Buku</p>
+                                    <p className="font-bold text-slate-800 text-sm">{denda.buku?.judul}</p>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
-                                        <p className="text-gray-600 text-sm">Hari Terlambat</p>
-                                        <p className="font-bold text-lg">{denda.jumlah_hari_terlambat} hari</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-gray-600 text-sm">Total Denda</p>
-                                        <p className="font-bold text-lg text-red-600">Rp {parseInt(denda.total_denda).toLocaleString('id-ID')}</p>
+                                        <p className="text-slate-600 text-sm font-semibold uppercase">Hari Terlambat</p>
+                                        <p className="font-bold text-2xl text-slate-800">⏰ {denda.jumlah_hari_terlambat}</p>
+                                        <p className="text-xs text-slate-600 mt-1">hari</p>
                                     </div>
                                     <div>
-                                        <p className="text-gray-600 text-sm">Status Pembayaran</p>
-                                        <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
-                                            denda.status_pembayaran === 'paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                        <p className="text-slate-600 text-sm font-semibold uppercase">Jumlah Denda</p>
+                                        <p className="font-bold text-2xl text-red-600">Rp {parseFloat(denda.jumlah_denda).toLocaleString('id-ID')}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-slate-600 text-sm font-semibold uppercase">Status Bayar</p>
+                                        <span className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${
+                                            denda.status_pembayaran === 'lunas' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                                         }`}>
-                                            {denda.status_pembayaran === 'paid' ? 'Sudah Dibayar' : 'Belum Dibayar'}
+                                            {denda.status_pembayaran === 'lunas' ? '✅ Lunas' : '❌ Belum Bayar'}
                                         </span>
                                     </div>
                                 </div>
@@ -191,6 +215,7 @@ export default function Show({ peminjaman }) {
                     </div>
                 </div>
             )}
-        </div>
+            </div>
+        </AuthenticatedLayout>
     );
 }

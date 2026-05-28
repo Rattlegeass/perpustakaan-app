@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('detail_peminjaman_id')->constrained('detail_peminjamans')->onDelete('cascade');
             $table->integer('jumlah_hari_terlambat');
-            $table->decimal('total_denda');
+            $table->decimal('jumlah_denda');
             $table->enum('status_pembayaran', ['belum_bayar', 'lunas'])->default('belum_bayar');
             $table->timestamps();
         });

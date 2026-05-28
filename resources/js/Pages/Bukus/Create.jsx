@@ -1,3 +1,4 @@
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -10,6 +11,7 @@ export default function Create() {
         tahun_terbit: new Date().getFullYear(),
         stok: '',
         kategori: '',
+        sinopsis: '',
         cover: null,
     });
 
@@ -23,98 +25,112 @@ export default function Create() {
     };
 
     return (
-        <div className="p-6 max-w-2xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">Tambah Buku Baru</h1>
-
-            <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow">
+        <AuthenticatedLayout header="Tambah Buku Baru">
+            <div className="max-w-4xl mx-auto px-4 py-8">
+                <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8">
                 <div className="mb-6">
-                    <label className="block mb-2 font-semibold">Judul</label>
+                    <label className="block mb-2 font-semibold text-slate-700">Judul</label>
                     <input
                         type="text"
                         value={data.judul}
                         onChange={(e) => setData('judul', e.target.value)}
-                        className={`w-full p-2 border rounded ${errors.judul ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full px-4 py-2 border rounded-lg transition ${errors.judul ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
                         placeholder="Masukkan judul buku"
                     />
-                    {errors.judul && <div className="text-red-500 text-sm mt-1">{errors.judul}</div>}
+                    {errors.judul && <div className="text-red-500 text-sm mt-2">{errors.judul}</div>}
                 </div>
 
                 <div className="mb-6">
-                    <label className="block mb-2 font-semibold">Penulis</label>
+                    <label className="block mb-2 font-semibold text-slate-700">Penulis</label>
                     <input
                         type="text"
                         value={data.penulis}
                         onChange={(e) => setData('penulis', e.target.value)}
-                        className={`w-full p-2 border rounded ${errors.penulis ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full px-4 py-2 border rounded-lg transition ${errors.penulis ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
                         placeholder="Masukkan nama penulis"
                     />
-                    {errors.penulis && <div className="text-red-500 text-sm mt-1">{errors.penulis}</div>}
+                    {errors.penulis && <div className="text-red-500 text-sm mt-2">{errors.penulis}</div>}
                 </div>
 
                 <div className="mb-6">
-                    <label className="block mb-2 font-semibold">Penerbit</label>
+                    <label className="block mb-2 font-semibold text-slate-700">Penerbit</label>
                     <input
                         type="text"
                         value={data.penerbit}
                         onChange={(e) => setData('penerbit', e.target.value)}
-                        className={`w-full p-2 border rounded ${errors.penerbit ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full px-4 py-2 border rounded-lg transition ${errors.penerbit ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
                         placeholder="Masukkan nama penerbit"
                     />
-                    {errors.penerbit && <div className="text-red-500 text-sm mt-1">{errors.penerbit}</div>}
+                    {errors.penerbit && <div className="text-red-500 text-sm mt-2">{errors.penerbit}</div>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                        <label className="block mb-2 font-semibold">Tahun Terbit</label>
+                        <label className="block mb-2 font-semibold text-slate-700">Tahun Terbit</label>
                         <input
                             type="number"
                             value={data.tahun_terbit}
                             onChange={(e) => setData('tahun_terbit', e.target.value)}
-                            className={`w-full p-2 border rounded ${errors.tahun_terbit ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full px-4 py-2 border rounded-lg transition ${errors.tahun_terbit ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
                         />
-                        {errors.tahun_terbit && <div className="text-red-500 text-sm mt-1">{errors.tahun_terbit}</div>}
+                        {errors.tahun_terbit && <div className="text-red-500 text-sm mt-2">{errors.tahun_terbit}</div>}
                     </div>
                     <div>
-                        <label className="block mb-2 font-semibold">Stok</label>
+                        <label className="block mb-2 font-semibold text-slate-700">Stok</label>
                         <input
                             type="number"
                             value={data.stok}
                             onChange={(e) => setData('stok', e.target.value)}
-                            className={`w-full p-2 border rounded ${errors.stok ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full px-4 py-2 border rounded-lg transition ${errors.stok ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
                             placeholder="Jumlah stok"
                         />
-                        {errors.stok && <div className="text-red-500 text-sm mt-1">{errors.stok}</div>}
+                        {errors.stok && <div className="text-red-500 text-sm mt-2">{errors.stok}</div>}
                     </div>
                 </div>
 
                 <div className="mb-6">
-                    <label className="block mb-2 font-semibold">Kategori</label>
-                    <input
-                        type="text"
+                    <label className="block mb-2 font-semibold text-slate-700">Kategori</label>
+                    <select
                         value={data.kategori}
                         onChange={(e) => setData('kategori', e.target.value)}
-                        className={`w-full p-2 border rounded ${errors.kategori ? 'border-red-500' : 'border-gray-300'}`}
-                        placeholder="Contoh: Fiksi, Non-fiksi, Referensi"
-                    />
-                    {errors.kategori && <div className="text-red-500 text-sm mt-1">{errors.kategori}</div>}
+                        className={`w-full px-4 py-2 border rounded-lg transition ${errors.kategori ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
+                    >
+                        <option value="">-- Pilih Kategori --</option>
+                        <option value="fiksi">Fiksi</option>
+                        <option value="non-fiksi">Non-Fiksi</option>
+                    </select>
+                    {errors.kategori && <div className="text-red-500 text-sm mt-2">{errors.kategori}</div>}
                 </div>
 
-                <div className="flex gap-3">
+                <div className="mb-6">
+                    <label className="block mb-2 font-semibold text-slate-700">Sinopsis</label>
+                    <textarea
+                        value={data.sinopsis}
+                        onChange={(e) => setData('sinopsis', e.target.value)}
+                        rows="4"
+                        className={`w-full px-4 py-2 border rounded-lg transition ${errors.sinopsis ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
+                        placeholder="Deskripsi singkat tentang buku"
+                    ></textarea>
+                    {errors.sinopsis && <div className="text-red-500 text-sm mt-2">{errors.sinopsis}</div>}
+                </div>
+
+                <div className="flex gap-3 pt-4">
                     <button
                         type="submit"
                         disabled={processing}
-                        className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+                        className="bg-blue-600 text-white px-8 py-2.5 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 transition"
                     >
                         {processing ? 'Menyimpan...' : 'Tambah Buku'}
                     </button>
                     <a
                         href="/bukus"
-                        className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+                        className="bg-slate-500 text-white px-8 py-2.5 rounded-lg font-semibold hover:bg-slate-600 transition"
                     >
                         Batal
                     </a>
                 </div>
             </form>
-        </div>
+            </div>
+        </AuthenticatedLayout>
     );
 }

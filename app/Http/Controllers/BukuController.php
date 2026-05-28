@@ -35,6 +35,7 @@ class BukuController extends Controller
             'tahun_terbit' => 'required',
             'stok' => 'required|integer',
             'kategori' => 'required',
+            'sinopsis' => 'required',
         ]);
 
         Buku::create([
@@ -44,6 +45,7 @@ class BukuController extends Controller
             'tahun_terbit' => $request->tahun_terbit,
             'stok' => $request->stok,
             'kategori' => $request->kategori,
+            'sinopsis' => $request->sinopsis,
         ]);
 
         return redirect('/bukus');
@@ -78,6 +80,7 @@ class BukuController extends Controller
             'tahun_terbit' => 'required',
             'stok' => 'required|integer',
             'kategori' => 'required',
+            'sinopsis' => 'required',
         ]);
 
         $buku->update([
@@ -87,6 +90,7 @@ class BukuController extends Controller
             'tahun_terbit' => $request->tahun_terbit,
             'stok' => $request->stok,
             'kategori' => $request->kategori,
+            'sinopsis' => $request->sinopsis,
         ]);
 
         return redirect('/bukus');
@@ -97,5 +101,28 @@ class BukuController extends Controller
         $buku->delete();
 
         return redirect('/bukus');
+    }
+
+    // MEMBER CATALOG VIEW
+    public function memberIndex(Request $request)
+    {
+        $bukus = Buku::query()
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('judul', 'like', '%' . $request->search . '%')
+                    ->orWhere('penulis', 'like', '%' . $request->search . '%')
+                    ->orWhere('sinopsis', 'like', '%' . $request->search . '%');
+            })
+            ->when($request->kategori, function ($query) use ($request) {
+                $query->where('kategori', $request->kategori);
+            })
+            ->latest()
+            ->paginate(12)
+            ->withQueryString();
+
+        return Inertia::render('Bukus/IndexMember', [
+            'bukus' => $bukus,
+            'filters' => $request->only(['search', 'kategori']),
+            'categories' => ['fiksi', 'non-fiksi']
+        ]);
     }
 }

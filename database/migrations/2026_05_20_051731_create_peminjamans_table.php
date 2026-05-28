@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->date('tgl_peminjaman');
-            $table->date('batas_tgl_peminjaman');
-            $table->enum('status_peminjaman', ['dipinjam', 'dikembalikan', 'terlambat'])->default('dipinjam');
+            $table->date('tgl_peminjaman')->nullable();  // Nullable - set saat member ambil buku
+            $table->date('batas_tgl_peminjaman')->nullable();  // Nullable - set saat member ambil buku (tgl_peminjaman + 7 hari)
+            $table->enum('status_peminjaman', ['menunggu_persetujuan', 'menunggu_pengambilan', 'dipinjam', 'dikembalikan', 'terlambat'])->default('menunggu_persetujuan');
             $table->timestamps();
         });
     }
