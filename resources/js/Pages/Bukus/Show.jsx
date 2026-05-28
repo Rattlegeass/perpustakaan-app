@@ -14,15 +14,20 @@ export default function Show({ buku }) {
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
                         {/* Cover */}
-                        <div>
-                            {buku.cover ? (
-                                <img src={buku.cover} alt={buku.judul} className="w-full rounded-xl object-cover shadow-md" />
-                            ) : (
-                                <div className="w-full aspect-[2/3] rounded-xl bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center text-4xl">
-                                    📚
-                                </div>
-                            )}
-                        </div>
+<div>
+    {buku.cover ? (
+        <img 
+            src={buku.cover} 
+            alt={buku.judul} 
+            // Tambahkan aspect-[2/3] agar ukurannya sama persis dengan yang tidak ada cover
+            className="w-full aspect-[2/3] rounded-xl object-cover shadow-md" 
+        />
+    ) : (
+        <div className="w-full aspect-[2/3] rounded-xl bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center text-4xl shadow-sm">
+            📚
+        </div>
+    )}
+</div>
 
                         {/* Details */}
                         <div className="md:col-span-2 space-y-6">

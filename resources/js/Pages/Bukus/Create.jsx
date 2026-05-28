@@ -103,6 +103,16 @@ export default function Create() {
                 </div>
 
                 <div className="mb-6">
+                    <label className="block mb-2 font-semibold text-slate-700">Cover Buku</label>
+                    <input
+                        type="file"
+                        onChange={(e) => setData('cover', e.target.files[0])}
+                        className={`w-full px-4 py-2 border rounded-lg transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 ${errors.cover ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
+                    />
+                    {errors.cover && <div className="text-red-500 text-sm mt-2">{errors.cover}</div>}
+                </div>
+
+                <div className="mb-6">
                     <label className="block mb-2 font-semibold text-slate-700">Sinopsis</label>
                     <textarea
                         value={data.sinopsis}

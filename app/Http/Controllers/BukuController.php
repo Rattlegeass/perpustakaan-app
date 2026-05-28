@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk mengelola file gambar
 
 class BukuController extends Controller
 {
@@ -28,6 +29,7 @@ class BukuController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Tambahkan validasi untuk cover (opsional, harus berupa gambar, maksimal 2MB)
         $request->validate([
             'judul' => 'required',
             'penulis' => 'required',
@@ -36,8 +38,19 @@ class BukuController extends Controller
             'stok' => 'required|integer',
             'kategori' => 'required',
             'sinopsis' => 'required',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
         ]);
 
+        // 2. Logika menyimpan gambar
+        $coverPath = null;
+        if ($request->hasFile('cover')) {
+            // Simpan gambar ke folder storage/app/public/covers
+            $path = $request->file('cover')->store('covers', 'public');
+            // Buat URL yang bisa diakses langsung oleh React
+            $coverPath = '/storage/' . $path;
+        }
+
+        // 3. Masukkan ke database
         Buku::create([
             'judul' => $request->judul,
             'penulis' => $request->penulis,
@@ -46,6 +59,7 @@ class BukuController extends Controller
             'stok' => $request->stok,
             'kategori' => $request->kategori,
             'sinopsis' => $request->sinopsis,
+            'cover' => $coverPath, // Simpan path cover-nya
         ]);
 
         return redirect('/bukus');
@@ -73,6 +87,7 @@ class BukuController extends Controller
 
     public function update(Request $request, Buku $buku)
     {
+        // 1. Tambahkan validasi cover di update
         $request->validate([
             'judul' => 'required',
             'penulis' => 'required',
@@ -81,8 +96,26 @@ class BukuController extends Controller
             'stok' => 'required|integer',
             'kategori' => 'required',
             'sinopsis' => 'required',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        // 2. Ambil path cover lama sebagai default
+        $coverPath = $buku->cover;
+
+        // 3. Jika ada file cover baru yang diupload
+        if ($request->hasFile('cover')) {
+            // Hapus gambar lama jika ada di penyimpanan lokal
+            if ($buku->cover && str_starts_with($buku->cover, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $buku->cover);
+                Storage::disk('public')->delete($oldPath);
+            }
+
+            // Simpan gambar baru
+            $path = $request->file('cover')->store('covers', 'public');
+            $coverPath = '/storage/' . $path;
+        }
+
+        // 4. Update data ke database
         $buku->update([
             'judul' => $request->judul,
             'penulis' => $request->penulis,
@@ -91,6 +124,7 @@ class BukuController extends Controller
             'stok' => $request->stok,
             'kategori' => $request->kategori,
             'sinopsis' => $request->sinopsis,
+            'cover' => $coverPath, // Simpan cover yang sudah diperbarui
         ]);
 
         return redirect('/bukus');
@@ -98,6 +132,12 @@ class BukuController extends Controller
 
     public function destroy(Buku $buku)
     {
+        // Hapus file gambar dari storage sebelum menghapus data bukunya
+        if ($buku->cover && str_starts_with($buku->cover, '/storage/')) {
+            $oldPath = str_replace('/storage/', '', $buku->cover);
+            Storage::disk('public')->delete($oldPath);
+        }
+
         $buku->delete();
 
         return redirect('/bukus');

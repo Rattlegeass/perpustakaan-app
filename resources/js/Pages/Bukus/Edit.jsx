@@ -1,10 +1,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { router, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react'; // Hapus 'router' karena kita pakai fungsi dari useForm
 import { useState } from 'react';
 
 export default function Edit({ buku }) {
     const [errors, setErrors] = useState({});
-    const { data, setData, processing } = useForm({
+    
+    // 1. Ambil fungsi 'post' dari useForm
+    const { data, setData, post, processing } = useForm({
+        _method: 'put', // 2. WAJIB TAMBAHKAN INI UNTUK EDIT FILE
         judul: buku.judul,
         penulis: buku.penulis,
         penerbit: buku.penerbit,
@@ -12,11 +15,15 @@ export default function Edit({ buku }) {
         stok: buku.stok,
         kategori: buku.kategori,
         sinopsis: buku.sinopsis || '',
+        cover: null, // Siapkan state untuk cover baru
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        router.put(`/bukus/${buku.id}`, data, {
+        
+        // 3. Ubah menjadi post (bukan put), Inertia akan otomatis merubahnya jadi PUT berkat _method di atas
+        post(`/bukus/${buku.id}`, {
+            forceFormData: true, // Wajib diaktifkan agar gambar terkirim
             onError: (errors) => {
                 setErrors(errors);
             },
@@ -27,6 +34,7 @@ export default function Edit({ buku }) {
         <AuthenticatedLayout header="Edit Buku">
             <div className="max-w-4xl mx-auto px-4 py-8">
                 <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8">
+                
                 <div className="mb-6">
                     <label className="block mb-2 font-semibold text-slate-700">Judul</label>
                     <input
@@ -99,6 +107,27 @@ export default function Edit({ buku }) {
                         <option value="non-fiksi">Non-Fiksi</option>
                     </select>
                     {errors.kategori && <div className="text-red-500 text-sm mt-2">{errors.kategori}</div>}
+                </div>
+
+                {/* Input Cover Buku */}
+                <div className="mb-6">
+                    <label className="block mb-2 font-semibold text-slate-700">Cover Buku</label>
+                    
+                    {/* Opsional: Tampilkan gambar lama jika ada */}
+                    {buku.cover && !data.cover && (
+                        <div className="mb-3">
+                            <p className="text-xs text-slate-500 mb-1">Cover saat ini:</p>
+                            <img src={buku.cover} alt="Cover Lama" className="w-24 h-32 object-cover rounded shadow-sm border border-slate-200" />
+                        </div>
+                    )}
+                    
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setData('cover', e.target.files[0])}
+                        className={`w-full px-4 py-2 border rounded-lg transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 ${errors.cover ? 'border-red-500 bg-red-50' : 'border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'}`}
+                    />
+                    {errors.cover && <div className="text-red-500 text-sm mt-2">{errors.cover}</div>}
                 </div>
 
                 <div className="mb-6">

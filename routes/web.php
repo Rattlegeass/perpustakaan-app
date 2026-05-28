@@ -9,6 +9,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StrukController;
+use App\Models\Buku;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -16,6 +17,19 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+    ]);
+});
+
+route::get('/', function () {
+    // 2. Ambil data 10 buku terbaru untuk ditampilkan di depan
+    $koleksiBuku = Buku::latest()->take(10)->get();
+
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+        'koleksiBuku' => $koleksiBuku, // 3. Kirim datanya ke React di sini
     ]);
 });
 
