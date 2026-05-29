@@ -38,7 +38,7 @@ class BukuController extends Controller
             'stok' => 'required|integer',
             'kategori' => 'required',
             'sinopsis' => 'required',
-            'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:5120', 
         ]);
 
         // 2. Logika menyimpan gambar
@@ -96,7 +96,7 @@ class BukuController extends Controller
             'stok' => 'required|integer',
             'kategori' => 'required',
             'sinopsis' => 'required',
-            'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
         // 2. Ambil path cover lama sebagai default
