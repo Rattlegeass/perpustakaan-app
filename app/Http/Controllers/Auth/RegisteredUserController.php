@@ -31,15 +31,21 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // 1. Tambahkan validasi untuk no_telp dan no_identitas di sini
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'no_telp' => 'required|string|max:20',
+            'no_identitas' => 'required|string|max:50',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // 2. Masukkan no_telp dan no_identitas ke dalam proses pembuatan User
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'no_telp' => $request->no_telp,
+            'no_identitas' => $request->no_identitas,
             'password' => Hash::make($request->password),
             'role' => 'member',
         ]);
