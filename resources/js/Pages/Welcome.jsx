@@ -282,22 +282,22 @@ export default function Welcome({ auth, koleksiBuku = [] }) {
                                                     <div className={`h-px w-full mb-6 ${category.isFeatured ? 'bg-blue-500/30' : 'bg-slate-100'}`}></div>
                                                     <div className="space-y-3.5">
                                                        {category.items.map((subItem, subIndex) => (
-    <div 
-        key={subIndex} 
-        onClick={() => { 
-            setActiveTab('kategori'); 
-            // UBAH BAGIAN INI: Menggunakan category.title bukan subItem
-            setKatalogKategori(category.title); 
-            setTimeout(() => { searchBarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100); 
-        }} 
-        className={`group/item flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 border ${category.isFeatured ? 'bg-blue-950/30 border-blue-800/20 hover:bg-yellow-400 hover:text-[#0B3A60] hover:border-transparent hover:shadow-lg hover:shadow-yellow-400/10' : 'bg-slate-50/60 border-transparent hover:bg-[#0B3A60] hover:text-white hover:shadow-lg hover:shadow-blue-900/10'}`}
-    >
-        <span className="text-sm font-bold tracking-wide">{subItem}</span>
-        <svg className="w-4 h-4 transform -translate-x-2 opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7-7" />
-        </svg>
-    </div>
-))}
+                                                            <div 
+                                                                key={subIndex} 
+                                                                onClick={() => { 
+                                                                    setActiveTab('kategori'); 
+                                                                    // UBAH BAGIAN INI: Menggunakan category.title bukan subItem
+                                                                    setKatalogKategori(category.title); 
+                                                                    setTimeout(() => { searchBarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100); 
+                                                                }} 
+                                                                className={`group/item flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 border ${category.isFeatured ? 'bg-blue-950/30 border-blue-800/20 hover:bg-yellow-400 hover:text-[#0B3A60] hover:border-transparent hover:shadow-lg hover:shadow-yellow-400/10' : 'bg-slate-50/60 border-transparent hover:bg-[#0B3A60] hover:text-white hover:shadow-lg hover:shadow-blue-900/10'}`}
+                                                            >
+                                                                <span className="text-sm font-bold tracking-wide">{subItem}</span>
+                                                                <svg className="w-4 h-4 transform -translate-x-2 opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7-7" />
+                                                                </svg>
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 </div>
                                             </div>
@@ -327,31 +327,31 @@ export default function Welcome({ auth, koleksiBuku = [] }) {
 
                                     {filteredBooks.length > 0 ? (
                                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-    {filteredBooks.map((book, index) => (
-        <div key={book.id} onClick={() => window.location.href = route('login')} className={`group flex flex-col cursor-pointer transition-all duration-700 ease-out ${isPopularVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`} style={{ transitionDelay: `${200 + (index * 100)}ms` }}>
-            <div className="relative aspect-[2/3] w-full rounded-2xl overflow-hidden transition-all duration-500 ease-out transform group-hover:-translate-y-2.5 shadow-sm group-hover:shadow-[0_20px_40px_-15px_rgba(11,58,96,0.3)] mb-4 bg-slate-200">
-                <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shine z-20 pointer-events-none"></div>
-                
-                {book.cover ? (
-                    <img src={book.cover} alt={book.judul} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" />
-                ) : (
-                    <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out group-hover:scale-105 ${book.kategori.toLowerCase() === 'fiksi' ? 'from-blue-600 to-blue-900' : 'from-slate-700 to-slate-900'}`}></div>
-                )}
-                
-                <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10 pointer-events-none"></div>
-                <div className="absolute left-3 top-0 bottom-0 w-px bg-white/10 z-10 pointer-events-none"></div>
-                <div className="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none z-10">
-                    <span className="text-[9px] font-black tracking-wider text-white bg-black/40 backdrop-blur-[4px] w-max px-2.5 py-1 rounded-md uppercase border border-white/10 shadow-sm">{book.kategori}</span>
-                </div>
-            </div>
-            <div className="space-y-1.5 px-1">
-                <span className="text-[10px] font-bold text-blue-600 block uppercase tracking-wider line-clamp-1">{book.penulis}</span>
-                <h4 className="font-black text-[#0B3A60] text-sm leading-snug group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">{book.judul}</h4>
-                <p className="text-xs font-semibold text-slate-400">Tahun {book.tahun_terbit}</p>
-            </div>
-        </div>
-    ))}
-</div>
+                                            {filteredBooks.map((book, index) => (
+                                                <div key={book.id} onClick={() => window.location.href = route('login')} className={`group flex flex-col cursor-pointer transition-all duration-700 ease-out ${isPopularVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`} style={{ transitionDelay: `${200 + (index * 100)}ms` }}>
+                                                    <div className="relative aspect-[2/3] w-full rounded-2xl overflow-hidden transition-all duration-500 ease-out transform group-hover:-translate-y-2.5 shadow-sm group-hover:shadow-[0_20px_40px_-15px_rgba(11,58,96,0.3)] mb-4 bg-slate-200">
+                                                        <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shine z-20 pointer-events-none"></div>
+                                                        
+                                                        {book.cover ? (
+                                                            <img src={book.cover} alt={book.judul} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" />
+                                                        ) : (
+                                                            <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out group-hover:scale-105 ${book.kategori.toLowerCase() === 'fiksi' ? 'from-blue-600 to-blue-900' : 'from-slate-700 to-slate-900'}`}></div>
+                                                        )}
+                                                        
+                                                        <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10 pointer-events-none"></div>
+                                                        <div className="absolute left-3 top-0 bottom-0 w-px bg-white/10 z-10 pointer-events-none"></div>
+                                                        <div className="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none z-10">
+                                                            <span className="text-[9px] font-black tracking-wider text-white bg-black/40 backdrop-blur-[4px] w-max px-2.5 py-1 rounded-md uppercase border border-white/10 shadow-sm">{book.kategori}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="space-y-1.5 px-1">
+                                                        <span className="text-[10px] font-bold text-blue-600 block uppercase tracking-wider line-clamp-1">{book.penulis}</span>
+                                                        <h4 className="font-black text-[#0B3A60] text-sm leading-snug group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">{book.judul}</h4>
+                                                        <p className="text-xs font-semibold text-slate-400">Tahun {book.tahun_terbit}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     ) : (
                                         <div className={`text-center py-16 bg-white/50 backdrop-blur-sm rounded-3xl border border-dashed border-slate-300 transition-all duration-700 delay-500 ${isPopularVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                                             <p className="text-sm font-semibold text-slate-500">Belum ada koleksi populer untuk jenis ini.</p>
@@ -423,35 +423,35 @@ export default function Welcome({ auth, koleksiBuku = [] }) {
                                                 <svg className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                                             </button>
                                             {isDropdownOpen && (
-    <div className="absolute top-full left-0 mt-4 w-56 bg-white border border-slate-100 rounded-xl shadow-xl py-3 z-[999] animate-fade-in">
-        <ul>
-            {/* Opsi untuk menampilkan semua buku */}
-            <li>
-                <button 
-                    onClick={() => { setKatalogKategori('Semua'); setIsDropdownOpen(false); }} 
-                    className={`w-full text-left px-5 py-2 text-sm transition-colors ${katalogKategori === 'Semua' ? 'bg-blue-50 text-blue-700 font-bold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600 border-l-4 border-transparent'}`}
-                >
-                    Semua Kategori
-                </button>
-            </li>
-            
-            {/* Opsi Fiksi dan Non-Fiksi */}
-            {dropdownCategories.map((kategori) => (
-                <li key={kategori.id}>
-                    <button 
-                        onClick={() => { 
-                            setKatalogKategori(katalogKategori === kategori.label ? 'Semua' : kategori.label); 
-                            setIsDropdownOpen(false); 
-                        }} 
-                        className={`w-full text-left px-5 py-2 text-sm transition-colors ${katalogKategori === kategori.label ? 'bg-blue-50 text-blue-700 font-bold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600 border-l-4 border-transparent'}`}
-                    >
-                        Buku {kategori.label}
-                    </button>
-                </li>
-            ))}
-        </ul>
-    </div>
-)}
+                                                <div className="absolute top-full left-0 mt-4 w-56 bg-white border border-slate-100 rounded-xl shadow-xl py-3 z-[999] animate-fade-in">
+                                                    <ul>
+                                                        {/* Opsi untuk menampilkan semua buku */}
+                                                        <li>
+                                                            <button 
+                                                                onClick={() => { setKatalogKategori('Semua'); setIsDropdownOpen(false); }} 
+                                                                className={`w-full text-left px-5 py-2 text-sm transition-colors ${katalogKategori === 'Semua' ? 'bg-blue-50 text-blue-700 font-bold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600 border-l-4 border-transparent'}`}
+                                                            >
+                                                                Semua Kategori
+                                                            </button>
+                                                        </li>
+                                                        
+                                                        {/* Opsi Fiksi dan Non-Fiksi */}
+                                                        {dropdownCategories.map((kategori) => (
+                                                            <li key={kategori.id}>
+                                                                <button 
+                                                                    onClick={() => { 
+                                                                        setKatalogKategori(katalogKategori === kategori.label ? 'Semua' : kategori.label); 
+                                                                        setIsDropdownOpen(false); 
+                                                                    }} 
+                                                                    className={`w-full text-left px-5 py-2 text-sm transition-colors ${katalogKategori === kategori.label ? 'bg-blue-50 text-blue-700 font-bold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600 border-l-4 border-transparent'}`}
+                                                                >
+                                                                    Buku {kategori.label}
+                                                                </button>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="w-px h-5 bg-slate-300 mx-4 md:mx-6"></div>
                                         <div className="flex items-center gap-3 flex-1 max-w-xl">
@@ -465,57 +465,56 @@ export default function Welcome({ auth, koleksiBuku = [] }) {
                                 </div>
                             </div>
                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-5 max-w-7xl mx-auto px-6">
-    {/* 1. Ganti popularBooks menjadi koleksiBuku */}
-    {koleksiBuku
-        .filter(book => {
-            if (katalogKategori === 'Semua') return true;
-            // 2. Ganti book.type menjadi book.kategori dan samakan huruf kecil/besar
-            return book.kategori.toLowerCase() === katalogKategori.toLowerCase();
-        })
-        // 3. Ganti book.title menjadi book.judul
-        .filter(book => book.judul.toLowerCase().includes(searchQuery.toLowerCase()))
-        .map((book, index) => (
-            <div 
-                key={book.id} 
-                onClick={() => window.location.href = route('login')}
-                className="group flex flex-col cursor-pointer animate-[fadeUp_0.5s_ease-out_both]" 
-                style={{ animationDelay: `${index * 40}ms` }}
-            >
-                <div className="relative aspect-[2/3] w-full rounded-xl overflow-hidden transition-all duration-500 ease-out transform group-hover:-translate-y-2 shadow-sm group-hover:shadow-[0_15px_30px_-10px_rgba(11,58,96,0.3)] mb-3 bg-slate-200">
-                    <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shine z-20 pointer-events-none"></div>
-                    
-                    {book.cover ? (
-                        <img src={book.cover} alt={book.judul} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" />
-                    ) : (
-                        <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out group-hover:scale-105 ${book.kategori.toLowerCase() === 'fiksi' ? 'from-blue-600 to-cyan-500' : 'from-[#0B3A60] to-slate-800'}`}></div>
-                    )}
-                    
-                    <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/30 via-transparent to-transparent z-10 pointer-events-none"></div>
-                    <div className="absolute left-2.5 top-0 bottom-0 w-px bg-white/20 z-10 pointer-events-none"></div>
-                    <div className="absolute inset-0 p-3 flex flex-col justify-between pointer-events-none z-10">
-                        {/* 4. Ganti book.category menjadi book.kategori */}
-                        <span className="text-[8px] font-black tracking-wider text-white bg-black/40 backdrop-blur-md w-max px-2 py-0.5 rounded uppercase border border-white/20 shadow-sm">
-                            {book.kategori}
-                        </span>
-                    </div>
-                </div>
-                <div className="space-y-1 px-1">
-                    {/* 5. Ganti book.type menjadi book.penulis (sebagai pemanis) */}
-                    <span className="text-[9px] font-bold text-cyan-600 block uppercase tracking-wider line-clamp-1">
-                        {book.penulis}
-                    </span>
-                    {/* 6. Ganti book.title menjadi book.judul */}
-                    <h4 className="font-bold text-[#0B3A60] text-xs leading-snug group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 title-book">
-                        {book.judul}
-                    </h4>
-                    {/* 7. Ganti book.year menjadi book.tahun_terbit */}
-                    <p className="text-[10px] font-semibold text-slate-400">
-                        {book.tahun_terbit}
-                    </p>
-                </div>
-            </div>
-    ))}
-</div>
+                                {koleksiBuku
+                                    .filter(book => {
+                                        if (katalogKategori === 'Semua') return true;
+                                        // 2. Ganti book.type menjadi book.kategori dan samakan huruf kecil/besar
+                                        return book.kategori.toLowerCase() === katalogKategori.toLowerCase();
+                                    })
+                                    // 3. Ganti book.title menjadi book.judul
+                                    .filter(book => book.judul.toLowerCase().includes(searchQuery.toLowerCase()))
+                                    .map((book, index) => (
+                                        <div 
+                                            key={book.id} 
+                                            onClick={() => window.location.href = route('login')}
+                                            className="group flex flex-col cursor-pointer animate-[fadeUp_0.5s_ease-out_both]" 
+                                            style={{ animationDelay: `${index * 40}ms` }}
+                                        >
+                                            <div className="relative aspect-[2/3] w-full rounded-xl overflow-hidden transition-all duration-500 ease-out transform group-hover:-translate-y-2 shadow-sm group-hover:shadow-[0_15px_30px_-10px_rgba(11,58,96,0.3)] mb-3 bg-slate-200">
+                                                <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shine z-20 pointer-events-none"></div>
+                                                
+                                                {book.cover ? (
+                                                    <img src={book.cover} alt={book.judul} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" />
+                                                ) : (
+                                                    <div className={`absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out group-hover:scale-105 ${book.kategori.toLowerCase() === 'fiksi' ? 'from-blue-600 to-cyan-500' : 'from-[#0B3A60] to-slate-800'}`}></div>
+                                                )}
+                                                
+                                                <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-r from-black/30 via-transparent to-transparent z-10 pointer-events-none"></div>
+                                                <div className="absolute left-2.5 top-0 bottom-0 w-px bg-white/20 z-10 pointer-events-none"></div>
+                                                <div className="absolute inset-0 p-3 flex flex-col justify-between pointer-events-none z-10">
+                                                    {/* 4. Ganti book.category menjadi book.kategori */}
+                                                    <span className="text-[8px] font-black tracking-wider text-white bg-black/40 backdrop-blur-md w-max px-2 py-0.5 rounded uppercase border border-white/20 shadow-sm">
+                                                        {book.kategori}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1 px-1">
+                                                {/* 5. Ganti book.type menjadi book.penulis (sebagai pemanis) */}
+                                                <span className="text-[9px] font-bold text-cyan-600 block uppercase tracking-wider line-clamp-1">
+                                                    {book.penulis}
+                                                </span>
+                                                {/* 6. Ganti book.title menjadi book.judul */}
+                                                <h4 className="font-bold text-[#0B3A60] text-xs leading-snug group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 title-book">
+                                                    {book.judul}
+                                                </h4>
+                                                {/* 7. Ganti book.year menjadi book.tahun_terbit */}
+                                                <p className="text-[10px] font-semibold text-slate-400">
+                                                    {book.tahun_terbit}
+                                                </p>
+                                            </div>
+                                        </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
@@ -640,511 +639,511 @@ export default function Welcome({ auth, koleksiBuku = [] }) {
                             </div>
                         </div>
                     )}
-{/* 2. TAMPILAN PUSAT BANTUAN (SIMPLIFIED & ELEGANT) */}
-{activeTab === 'bantuan' && (
-    <div className="animate-fade-in min-h-[70vh] w-full pb-16">
-        
-        {/* 1. Header Hero Section (Full-width, No Space dengan Navbar) */}
-        <section className="w-screen relative left-1/2 -translate-x-1/2 bg-[#0B3A60] text-white -mt-28 pt-36 pb-20 md:pb-28 overflow-hidden mb-16 shadow-inner">
-            {/* Dekorasi Latar Belakang */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/4 -translate-y-1/4"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-400/10 rounded-full blur-[100px] pointer-events-none transform -translate-x-1/3 translate-y-1/3"></div>
-            
-            <div className="max-w-6xl mx-auto px-6 md:px-12 flex flex-col items-center md:flex-row md:items-start gap-12 md:gap-20 relative z-10">
-                {/* Bagian Kiri: Judul */}
-                <div className="w-full md:w-5/12 flex flex-col items-center md:items-start text-center md:text-left">
-                    <div className="flex items-center gap-3 mb-6 opacity-0 animate-fade-up" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
-                        <div className="h-px w-10 bg-yellow-400"></div>
-                        <span className="text-yellow-400 font-bold tracking-[0.2em] text-xs uppercase">
-                            FAQ & Kontak
-                        </span>
-                    </div>
-                    <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] tracking-tight opacity-0 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
-                        <strong className="font-black">PUSAT</strong><br />
-                        <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">BANTUAN</span>
-                    </h2>
-                </div>
+                    {/* 2. TAMPILAN PUSAT BANTUAN (SIMPLIFIED & ELEGANT) */}
+                    {activeTab === 'bantuan' && (
+                        <div className="animate-fade-in min-h-[70vh] w-full pb-16">
+                            
+                            {/* 1. Header Hero Section (Full-width, No Space dengan Navbar) */}
+                            <section className="w-screen relative left-1/2 -translate-x-1/2 bg-[#0B3A60] text-white -mt-28 pt-36 pb-20 md:pb-28 overflow-hidden mb-16 shadow-inner">
+                                {/* Dekorasi Latar Belakang */}
+                                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/4 -translate-y-1/4"></div>
+                                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-400/10 rounded-full blur-[100px] pointer-events-none transform -translate-x-1/3 translate-y-1/3"></div>
+                                
+                                <div className="max-w-6xl mx-auto px-6 md:px-12 flex flex-col items-center md:flex-row md:items-start gap-12 md:gap-20 relative z-10">
+                                    {/* Bagian Kiri: Judul */}
+                                    <div className="w-full md:w-5/12 flex flex-col items-center md:items-start text-center md:text-left">
+                                        <div className="flex items-center gap-3 mb-6 opacity-0 animate-fade-up" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+                                            <div className="h-px w-10 bg-yellow-400"></div>
+                                            <span className="text-yellow-400 font-bold tracking-[0.2em] text-xs uppercase">
+                                                FAQ & Kontak
+                                            </span>
+                                        </div>
+                                        <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] tracking-tight opacity-0 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
+                                            <strong className="font-black">PUSAT</strong><br />
+                                            <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">BANTUAN</span>
+                                        </h2>
+                                    </div>
 
-                {/* Bagian Kanan: Penjelasan Singkat */}
-                <div className="w-full md:w-7/12 flex flex-col justify-center min-h-[100px]">
-                    <p className="text-lg md:text-xl leading-relaxed font-medium text-blue-50/90 opacity-0 animate-fade-up" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
-                        Punya kendala seputar akun Pustaka Digital atau aturan peminjaman? Temukan jawaban cepat di bawah ini atau hubungi langsung admin support kami.
-                    </p>
-                </div>
-            </div>
-        </section>
+                                    {/* Bagian Kanan: Penjelasan Singkat */}
+                                    <div className="w-full md:w-7/12 flex flex-col justify-center min-h-[100px]">
+                                        <p className="text-lg md:text-xl leading-relaxed font-medium text-blue-50/90 opacity-0 animate-fade-up" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+                                            Punya kendala seputar akun Pustaka Digital atau aturan peminjaman? Temukan jawaban cepat di bawah ini atau hubungi langsung admin support kami.
+                                        </p>
+                                    </div>
+                                </div>
+                            </section>
 
-        {/* 2. Tata Letak Konten (2 Kolom: FAQ & Kontak Admin) */}
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 px-4 relative z-10">
-            
-            {/* KOLOM KIRI (Lebih Lebar): Daftar Pertanyaan Sering Diajukan (FAQ) */}
-            <div className="md:col-span-2 space-y-4">
-                <h3 className="text-2xl font-black text-[#0B3A60] mb-6 opacity-0 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
-                    Pertanyaan yang Sering Diajukan
-                </h3>
+                            {/* 2. Tata Letak Konten (2 Kolom: FAQ & Kontak Admin) */}
+                            <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 px-4 relative z-10">
+                                
+                                {/* KOLOM KIRI (Lebih Lebar): Daftar Pertanyaan Sering Diajukan (FAQ) */}
+                                <div className="md:col-span-2 space-y-4">
+                                    <h3 className="text-2xl font-black text-[#0B3A60] mb-6 opacity-0 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
+                                        Pertanyaan yang Sering Diajukan
+                                    </h3>
 
-                {/* FAQ 1 */}
-                <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '0.7s', animationFillMode: 'forwards' }}>
-                    <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
-                        <span>Bagaimana cara meminjam buku di Pustaka Digital?</span>
-                        <span className="transition-transform duration-300 group-open:rotate-180">
-                            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
-                        </span>
-                    </summary>
-                    <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
-                        Sangat mudah! Pastikan Anda sudah login terlebih dahulu. Cari buku yang Anda inginkan di halaman katalog, klik detail buku, lalu tekan tombol <strong className="text-[#0B3A60]">"Pinjam Buku"</strong>. Buku akan otomatis masuk ke rak digital Anda dan bisa langsung dibaca melalui browser.
-                    </div>
-                </details>
+                                    {/* FAQ 1 */}
+                                    <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '0.7s', animationFillMode: 'forwards' }}>
+                                        <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
+                                            <span>Bagaimana cara meminjam buku di Pustaka Digital?</span>
+                                            <span className="transition-transform duration-300 group-open:rotate-180">
+                                                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+                                            </span>
+                                        </summary>
+                                        <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
+                                            Sangat mudah! Pastikan Anda sudah login terlebih dahulu. Cari buku yang Anda inginkan di halaman katalog, klik detail buku, lalu tekan tombol <strong className="text-[#0B3A60]">"Pinjam Buku"</strong>. Buku akan otomatis masuk ke rak digital Anda dan bisa langsung dibaca melalui browser.
+                                        </div>
+                                    </details>
 
-                {/* FAQ 2 */}
-                <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
-                    <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
-                        <span>Berapa lama batas waktu peminjaman satu buku?</span>
-                        <span className="transition-transform duration-300 group-open:rotate-180">
-                            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
-                        </span>
-                    </summary>
-                    <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
-                        Masa peminjaman standar untuk setiap buku adalah <strong className="text-[#0B3A60]">7 hari</strong>. Anda dapat mengembalikannya lebih cepat jika sudah selesai membaca agar kuota peminjaman Anda kosong kembali.
-                    </div>
-                </details>
+                                    {/* FAQ 2 */}
+                                    <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
+                                        <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
+                                            <span>Berapa lama batas waktu peminjaman satu buku?</span>
+                                            <span className="transition-transform duration-300 group-open:rotate-180">
+                                                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+                                            </span>
+                                        </summary>
+                                        <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
+                                            Masa peminjaman standar untuk setiap buku adalah <strong className="text-[#0B3A60]">7 hari</strong>. Anda dapat mengembalikannya lebih cepat jika sudah selesai membaca agar kuota peminjaman Anda kosong kembali.
+                                        </div>
+                                    </details>
 
-                {/* FAQ 3 */}
-                <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
-                    <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
-                        <span>Bagaimana aturan denda jika terlambat mengembalikan buku?</span>
-                        <span className="transition-transform duration-300 group-open:rotate-180">
-                            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
-                        </span>
-                    </summary>
-                    <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
-                        Demi kenyamanan sirkulasi bersama, keterlambatan pengembalian buku akan dikenakan denda administratif sebesar <strong className="text-amber-600">Rp 1.000,- per hari untuk setiap buku</strong>. Akun Anda akan ditangguhkan sementara dari peminjaman baru sampai denda diselesaikan.
-                    </div>
-                </details>
+                                    {/* FAQ 3 */}
+                                    <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
+                                        <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
+                                            <span>Bagaimana aturan denda jika terlambat mengembalikan buku?</span>
+                                            <span className="transition-transform duration-300 group-open:rotate-180">
+                                                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+                                            </span>
+                                        </summary>
+                                        <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
+                                            Demi kenyamanan sirkulasi bersama, keterlambatan pengembalian buku akan dikenakan denda administratif sebesar <strong className="text-amber-600">Rp 1.000,- per hari untuk setiap buku</strong>. Akun Anda akan ditangguhkan sementara dari peminjaman baru sampai denda diselesaikan.
+                                        </div>
+                                    </details>
 
-                {/* FAQ 4 */}
-                <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
-                    <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
-                        <span>Mengapa saya tidak bisa login ke akun saya?</span>
-                        <span className="transition-transform duration-300 group-open:rotate-180">
-                            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
-                        </span>
-                    </summary>
-                    <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
-                        Hal ini biasanya terjadi karena salah memasukkan password atau akun Anda belum diaktivasi oleh admin perpustakaan. Jika Anda lupa password, silakan hubungi admin support melalui kontak di sebelah kanan untuk reset akun secara instan.
-                    </div>
-                </details>
-                {/* FAQ 5: Tentang Kebijakan & Privasi */}
-<details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '1.1s', animationFillMode: 'forwards' }}>
-    <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
-        <span>Di mana saya bisa membaca Syarat, Ketentuan, dan Kebijakan Privasi platform?</span>
-        <span className="transition-transform duration-300 group-open:rotate-180">
-            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
-        </span>
-    </summary>
-    <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
-        Kami sangat menjaga keamanan data dan kenyamanan sirkulasi Anda. Dokumen legalitas lengkap dapat Anda akses secara transparan melalui tautan <a href="/syarat-ketentuan" className="text-blue-600 font-bold hover:underline">Syarat & Ketentuan Pengguna</a> serta <a href="/kebijakan-privasi" className="text-blue-600 font-bold hover:underline">Kebijakan Privasi</a> yang tersedia di bagian bawah (footer) website ini.
-    </div>
-</details>
-            </div>
-
-            {/* KOLOM KANAN: Informasi Kontak Admin (Sleek & Clean) */}
-            <div className="space-y-6">
-                <h3 className="text-2xl font-black text-[#0B3A60] opacity-0 animate-fade-up" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
-                    Kontak Admin
-                </h3>
-
-                {/* Card Nomor Telepon / Hotline Bantuan (Ikon Elemen Telepon Mewah) */}
-                <div className="bg-white p-6 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100 flex flex-col gap-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group opacity-0 animate-fade-up" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-[#0B3A60] group-hover:text-white transition-all duration-300 shadow-sm">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                            </svg>
+                                    {/* FAQ 4 */}
+                                    <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
+                                        <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
+                                            <span>Mengapa saya tidak bisa login ke akun saya?</span>
+                                            <span className="transition-transform duration-300 group-open:rotate-180">
+                                                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+                                            </span>
+                                        </summary>
+                                        <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
+                                            Hal ini biasanya terjadi karena salah memasukkan password atau akun Anda belum diaktivasi oleh admin perpustakaan. Jika Anda lupa password, silakan hubungi admin support melalui kontak di sebelah kanan untuk reset akun secara instan.
+                                        </div>
+                                    </details>
+                                    {/* FAQ 5: Tentang Kebijakan & Privasi */}
+                    <details className="group bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden opacity-0 animate-fade-up" style={{ animationDelay: '1.1s', animationFillMode: 'forwards' }}>
+                        <summary className="flex items-center justify-between p-6 font-bold text-[#0B3A60] cursor-pointer list-none select-none group-open:bg-slate-50/50 transition-colors">
+                            <span>Di mana saya bisa membaca Syarat, Ketentuan, dan Kebijakan Privasi platform?</span>
+                            <span className="transition-transform duration-300 group-open:rotate-180">
+                                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+                            </span>
+                        </summary>
+                        <div className="p-6 pt-0 text-slate-500 leading-relaxed text-sm border-t border-slate-50">
+                            Kami sangat menjaga keamanan data dan kenyamanan sirkulasi Anda. Dokumen legalitas lengkap dapat Anda akses secara transparan melalui tautan <a href="/syarat-ketentuan" className="text-blue-600 font-bold hover:underline">Syarat & Ketentuan Pengguna</a> serta <a href="/kebijakan-privasi" className="text-blue-600 font-bold hover:underline">Kebijakan Privasi</a> yang tersedia di bagian bawah (footer) website ini.
                         </div>
-                        <div>
-                            <h4 className="font-black text-[#0B3A60] text-base">Hotline Support</h4>
-                            <p className="text-slate-400 text-xs">Hubungi via Pesan Teknis / Telepon.</p>
+                    </details>
+                                </div>
+
+                                {/* KOLOM KANAN: Informasi Kontak Admin (Sleek & Clean) */}
+                                <div className="space-y-6">
+                                    <h3 className="text-2xl font-black text-[#0B3A60] opacity-0 animate-fade-up" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
+                                        Kontak Admin
+                                    </h3>
+
+                                    {/* Card Nomor Telepon / Hotline Bantuan (Ikon Elemen Telepon Mewah) */}
+                                    <div className="bg-white p-6 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100 flex flex-col gap-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group opacity-0 animate-fade-up" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-[#0B3A60] group-hover:text-white transition-all duration-300 shadow-sm">
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-black text-[#0B3A60] text-base">Hotline Support</h4>
+                                                <p className="text-slate-400 text-xs">Hubungi via Pesan Teknis / Telepon.</p>
+                                            </div>
+                                        </div>
+                                        {/* Kotak Nomor Telepon */}
+                                        <div className="w-full bg-slate-50 border border-slate-200 text-[#0B3A60] text-center py-3.5 rounded-xl font-black text-lg tracking-wider">
+                                            +62 812-3456-7890
+                                        </div>
+                                    </div>
+
+                                    {/* Card Alamat Email */}
+                                    <div className="bg-white p-6 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100 flex flex-col gap-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group opacity-0 animate-fade-up" style={{ animationDelay: '1.1s', animationFillMode: 'forwards' }}>
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-[#0B3A60] group-hover:text-white transition-all duration-300 shadow-sm">
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-black text-[#0B3A60] text-base">Email Resmi</h4>
+                                                <p className="text-slate-400 text-xs">Untuk kendala administratif resmi.</p>
+                                            </div>
+                                        </div>
+                                        {/* Kotak Email */}
+                                        <div className="w-full bg-slate-50 border border-slate-200 text-[#0B3A60] text-center py-3.5 rounded-xl font-bold text-sm tracking-wide">
+                                            support@pustakadigital.com
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-                    {/* Kotak Nomor Telepon */}
-                    <div className="w-full bg-slate-50 border border-slate-200 text-[#0B3A60] text-center py-3.5 rounded-xl font-black text-lg tracking-wider">
-                        +62 812-3456-7890
-                    </div>
-                </div>
+                    )}
+                    {/* 3. TAMPILAN SYARAT & KETENTUAN (MODERN GRID LAYOUT) */}
+                    {activeTab === 'syarat' && (
+                        <div className="animate-fade-in min-h-[70vh] w-full pb-20">
+                            
+                            {/* 1. Hero Header Section */}
+                            <section className="w-screen relative left-1/2 -translate-x-1/2 bg-[#0B3A60] text-white -mt-28 pt-36 pb-20 md:pb-24 overflow-hidden mb-16 shadow-inner">
+                                {/* Efek Bola Cahaya Latar Belakang */}
+                                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/4 -translate-y-1/4"></div>
+                                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-400/10 rounded-full blur-[100px] pointer-events-none transform -translate-x-1/3 translate-y-1/3"></div>
+                                
+                                <div className="max-w-6xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
+                                    <span className="text-yellow-400 font-bold tracking-[0.2em] text-xs uppercase block mb-4 opacity-0 animate-fade-up" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+                                        Regulasi & Hukum
+                                    </span>
+                                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black opacity-0 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
+                                        SYARAT & KETENTUAN
+                                    </h2>
+                                    <p className="text-blue-100/80 mt-6 text-base md:text-lg max-w-2xl font-medium opacity-0 animate-fade-up" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+                                        Panduan resmi penggunaan layanan, sirkulasi peminjaman buku digital, hak cipta, serta sanksi di platform Pustaka Digital.
+                                    </p>
+                                    <div className="mt-8 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-blue-200/80 font-semibold backdrop-blur-sm opacity-0 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
+                                        Terakhir Diperbarui: Mei 2026
+                                    </div>
+                                </div>
+                            </section>
 
-                {/* Card Alamat Email */}
-                <div className="bg-white p-6 rounded-3xl shadow-xl shadow-blue-900/5 border border-slate-100 flex flex-col gap-5 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group opacity-0 animate-fade-up" style={{ animationDelay: '1.1s', animationFillMode: 'forwards' }}>
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-[#0B3A60] group-hover:text-white transition-all duration-300 shadow-sm">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
+                            {/* 2. Konten Utama Dokumen (Grid Layout 2 Kolom) */}
+                            <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                                
+                                {/* Card 1: Registrasi */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '0.7s', animationFillMode: 'forwards' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">1</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Registrasi & Akun Pengguna</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Platform ini terbuka untuk publik secara terbatas. Anda wajib mendaftarkan akun menggunakan data identitas yang valid. Akun Anda adalah tanggung jawab pribadi; pembagian kredensial login kepada pihak luar dilarang keras demi keamanan data.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 2: Sirkulasi */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">2</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Sirkulasi & Masa Peminjaman</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Setiap akun memiliki batasan kuota peminjaman. Batas waktu membaca untuk setiap judul buku adalah maksimal 7 hari kalender. Sistem akan melakukan penarikan buku secara otomatis dari rak digital Anda saat durasi peminjaman habis.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 3: Denda */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-amber-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">3</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 border border-amber-100 shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Aturan Denda Administratif</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Keterlambatan sirkulasi akibat kelalaian pengembalian mandiri akan dikenakan denda administratif sebesar <strong className="text-amber-600">Rp 1.000,- per hari/buku</strong>. Akses pinjam buku baru akan dibekukan sementara hingga denda diselesaikan.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 4: Hak Cipta */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">4</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Perlindungan Hak Cipta</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Seluruh koleksi di platform ini dilindungi oleh Undang-Undang Hak Cipta. Pengguna dilarang menyalin, menggandakan, melakukan <i>screen capture</i> massal, atau mendistribusikan ulang file PDF di luar dari sistem pembacaan (*viewer*) resmi kami.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 5: Sanksi */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '1.1s', animationFillMode: 'forwards' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-red-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">5</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 border border-red-100 shadow-sm group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Sanksi Penyalahgunaan</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Kami berhak melakukan investigasi dan pemblokiran akun secara permanen tanpa pemberitahuan jika pengguna terbukti membuat akun palsu, mengeksploitasi celah keamanan (*bug*), atau melanggar hak cipta penerbit buku.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 6: Disclaimer */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '1.2s', animationFillMode: 'forwards' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-slate-100 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">6</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-6 border border-slate-200 shadow-sm group-hover:bg-slate-600 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Batasan Tanggung Jawab</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Kami tidak bertanggung jawab atas kerugian material/non-material akibat pemeliharaan server (*maintenance*). Seluruh keputusan administratif denda dan pembekuan akun mutlak berada di tangan pengelola perpustakaan.
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                        <div>
-                            <h4 className="font-black text-[#0B3A60] text-base">Email Resmi</h4>
-                            <p className="text-slate-400 text-xs">Untuk kendala administratif resmi.</p>
+                    )}
+
+                    {/* 4. TAMPILAN KEBIJAKAN PRIVASI (MODERN GRID LAYOUT & ANIMATED) */}
+                    {activeTab === 'privasi' && (
+                        <div className="animate-[fadeIn_0.5s_ease-out_both] min-h-[70vh] w-full pb-20">
+                            
+                            {/* 1. Hero Header Section */}
+                            <section className="w-screen relative left-1/2 -translate-x-1/2 bg-[#0B3A60] text-white -mt-28 pt-36 pb-20 md:pb-24 overflow-hidden mb-16 shadow-inner">
+                                {/* Efek Bola Cahaya */}
+                                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/4 -translate-y-1/4"></div>
+                                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-400/10 rounded-full blur-[100px] pointer-events-none transform -translate-x-1/3 translate-y-1/3"></div>
+
+                                <div className="max-w-6xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
+                                    {/* Judul Hero (Muncul duluan) */}
+                                    <span className="text-emerald-400 font-bold tracking-[0.2em] text-xs uppercase block mb-4 opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '100ms' }}>
+                                        Privasi & Keamanan Data
+                                    </span>
+                                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '250ms' }}>
+                                        KEBIJAKAN PRIVASI
+                                    </h2>
+                                    <p className="text-blue-100/80 mt-6 text-base md:text-lg max-w-2xl font-medium opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '400ms' }}>
+                                        Transparansi penuh mengenai bagaimana kami mengumpulkan, melindungi, dan mengelola data pribadi Anda di ekosistem Pustaka Digital.
+                                    </p>
+                                    <div className="mt-8 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-blue-200/80 font-semibold backdrop-blur-sm opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '500ms' }}>
+                                        Terakhir Diperbarui: Mei 2026
+                                    </div>
+                                </div>
+                            </section>
+
+                        {/* 2. Konten Utama (Grid Layout 2 Kolom dengan Efek Muncul dari Samping Bergantian) */}
+                            <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10 overflow-hidden">
+
+                                {/* Card 1: Data (Muncul dari Kiri) */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeLeft_0.6s_ease-out_both]" style={{ animationDelay: '600ms' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-emerald-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">1</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 border border-emerald-100 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Pengumpulan Data Pribadi</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Kami mengumpulkan informasi identitas dasar seperti nama lengkap, alamat email aktif, dan status keanggotaan saat Anda mendaftar. Data ini murni digunakan untuk keperluan sirkulasi peminjaman dan identifikasi akun yang sah.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 2: Keamanan (Muncul dari Kanan) */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeRight_0.6s_ease-out_both]" style={{ animationDelay: '700ms' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">2</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Enkripsi & Keamanan Server</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Password dan data sensitif Anda dienkripsi menggunakan standar keamanan industri terbaru. Server kami dilindungi oleh firewall berlapis untuk mencegah akses ilegal atau kebocoran data (*data breach*).
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 3: Cookies (Muncul dari Kiri) */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeLeft_0.6s_ease-out_both]" style={{ animationDelay: '800ms' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-amber-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">3</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 border border-amber-100 shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Penggunaan Cookies</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Kami menggunakan *cookies* sesi secara minimalis hanya untuk mempertahankan status *login* Anda agar tidak perlu memasukkan password berulang kali. Kami **tidak melacak** riwayat internet Anda di luar web kami.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 4: Riwayat (Muncul dari Kanan) */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeRight_0.6s_ease-out_both]" style={{ animationDelay: '900ms' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">4</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Privasi Riwayat Membaca</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Log aktivitas membaca dan riwayat peminjaman buku Anda dikumpulkan semata-mata untuk sistem rak digital pribadi Anda dan statistik agregat anonim perpustakaan, bukan untuk dipublikasikan ke publik.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 5: Pihak Ketiga (Muncul dari Kiri) */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeLeft_0.6s_ease-out_both]" style={{ animationDelay: '1000ms' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-red-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">5</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 border border-red-100 shadow-sm group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Tidak Ada Penjualan Data</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Kami berjanji dan menjamin secara hukum bahwa data identitas dan kontak Anda **tidak akan pernah dijual**, disewakan, atau dibagikan kepada pihak ketiga, agensi periklanan, atau entitas komersial mana pun.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Card 6: Hapus Data (Muncul dari Kanan) */}
+                                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeRight_0.6s_ease-out_both]" style={{ animationDelay: '1100ms' }}>
+                                    <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-slate-100 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">6</div>
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-6 border border-slate-200 shadow-sm group-hover:bg-slate-600 group-hover:text-white transition-colors duration-300">
+                                            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                        </div>
+                                        <h4 className="font-black text-[#0B3A60] text-xl mb-3">Hak Penghapusan Akun</h4>
+                                        <p className="text-slate-500 leading-relaxed text-sm">
+                                            Anda memiliki hak penuh untuk meminta penghapusan akun beserta seluruh jejak data pribadi Anda dari server kami. Silakan hubungi admin *support* jika Anda ingin melakukan penutupan akun permanen.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </div>
                         </div>
-                    </div>
-                    {/* Kotak Email */}
-                    <div className="w-full bg-slate-50 border border-slate-200 text-[#0B3A60] text-center py-3.5 rounded-xl font-bold text-sm tracking-wide">
-                        support@pustakadigital.com
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-)}
-{/* 3. TAMPILAN SYARAT & KETENTUAN (MODERN GRID LAYOUT) */}
-{activeTab === 'syarat' && (
-    <div className="animate-fade-in min-h-[70vh] w-full pb-20">
-        
-        {/* 1. Hero Header Section */}
-        <section className="w-screen relative left-1/2 -translate-x-1/2 bg-[#0B3A60] text-white -mt-28 pt-36 pb-20 md:pb-24 overflow-hidden mb-16 shadow-inner">
-            {/* Efek Bola Cahaya Latar Belakang */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/4 -translate-y-1/4"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-400/10 rounded-full blur-[100px] pointer-events-none transform -translate-x-1/3 translate-y-1/3"></div>
-            
-            <div className="max-w-6xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
-                <span className="text-yellow-400 font-bold tracking-[0.2em] text-xs uppercase block mb-4 opacity-0 animate-fade-up" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
-                    Regulasi & Hukum
-                </span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black opacity-0 animate-fade-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
-                    SYARAT & KETENTUAN
-                </h2>
-                <p className="text-blue-100/80 mt-6 text-base md:text-lg max-w-2xl font-medium opacity-0 animate-fade-up" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
-                    Panduan resmi penggunaan layanan, sirkulasi peminjaman buku digital, hak cipta, serta sanksi di platform Pustaka Digital.
-                </p>
-                <div className="mt-8 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-blue-200/80 font-semibold backdrop-blur-sm opacity-0 animate-fade-up" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
-                    Terakhir Diperbarui: Mei 2026
-                </div>
-            </div>
-        </section>
-
-        {/* 2. Konten Utama Dokumen (Grid Layout 2 Kolom) */}
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-            
-            {/* Card 1: Registrasi */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '0.7s', animationFillMode: 'forwards' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">1</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Registrasi & Akun Pengguna</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Platform ini terbuka untuk publik secara terbatas. Anda wajib mendaftarkan akun menggunakan data identitas yang valid. Akun Anda adalah tanggung jawab pribadi; pembagian kredensial login kepada pihak luar dilarang keras demi keamanan data.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 2: Sirkulasi */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">2</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Sirkulasi & Masa Peminjaman</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Setiap akun memiliki batasan kuota peminjaman. Batas waktu membaca untuk setiap judul buku adalah maksimal 7 hari kalender. Sistem akan melakukan penarikan buku secara otomatis dari rak digital Anda saat durasi peminjaman habis.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 3: Denda */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-amber-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">3</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 border border-amber-100 shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Aturan Denda Administratif</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Keterlambatan sirkulasi akibat kelalaian pengembalian mandiri akan dikenakan denda administratif sebesar <strong className="text-amber-600">Rp 1.000,- per hari/buku</strong>. Akses pinjam buku baru akan dibekukan sementara hingga denda diselesaikan.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 4: Hak Cipta */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">4</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Perlindungan Hak Cipta</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Seluruh koleksi di platform ini dilindungi oleh Undang-Undang Hak Cipta. Pengguna dilarang menyalin, menggandakan, melakukan <i>screen capture</i> massal, atau mendistribusikan ulang file PDF di luar dari sistem pembacaan (*viewer*) resmi kami.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 5: Sanksi */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '1.1s', animationFillMode: 'forwards' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-red-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">5</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 border border-red-100 shadow-sm group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Sanksi Penyalahgunaan</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Kami berhak melakukan investigasi dan pemblokiran akun secara permanen tanpa pemberitahuan jika pengguna terbukti membuat akun palsu, mengeksploitasi celah keamanan (*bug*), atau melanggar hak cipta penerbit buku.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 6: Disclaimer */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-fade-up" style={{ animationDelay: '1.2s', animationFillMode: 'forwards' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-slate-100 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">6</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-6 border border-slate-200 shadow-sm group-hover:bg-slate-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Batasan Tanggung Jawab</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Kami tidak bertanggung jawab atas kerugian material/non-material akibat pemeliharaan server (*maintenance*). Seluruh keputusan administratif denda dan pembekuan akun mutlak berada di tangan pengelola perpustakaan.
-                    </p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-)}
-
-{/* 4. TAMPILAN KEBIJAKAN PRIVASI (MODERN GRID LAYOUT & ANIMATED) */}
-{activeTab === 'privasi' && (
-    <div className="animate-[fadeIn_0.5s_ease-out_both] min-h-[70vh] w-full pb-20">
-        
-        {/* 1. Hero Header Section */}
-        <section className="w-screen relative left-1/2 -translate-x-1/2 bg-[#0B3A60] text-white -mt-28 pt-36 pb-20 md:pb-24 overflow-hidden mb-16 shadow-inner">
-            {/* Efek Bola Cahaya */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/4 -translate-y-1/4"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-400/10 rounded-full blur-[100px] pointer-events-none transform -translate-x-1/3 translate-y-1/3"></div>
-
-            <div className="max-w-6xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
-                {/* Judul Hero (Muncul duluan) */}
-                <span className="text-emerald-400 font-bold tracking-[0.2em] text-xs uppercase block mb-4 opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '100ms' }}>
-                    Privasi & Keamanan Data
-                </span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '250ms' }}>
-                    KEBIJAKAN PRIVASI
-                </h2>
-                <p className="text-blue-100/80 mt-6 text-base md:text-lg max-w-2xl font-medium opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '400ms' }}>
-                    Transparansi penuh mengenai bagaimana kami mengumpulkan, melindungi, dan mengelola data pribadi Anda di ekosistem Pustaka Digital.
-                </p>
-                <div className="mt-8 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-xs text-blue-200/80 font-semibold backdrop-blur-sm opacity-0 animate-[fadeUp_0.6s_ease-out_both]" style={{ animationDelay: '500ms' }}>
-                    Terakhir Diperbarui: Mei 2026
-                </div>
-            </div>
-        </section>
-
-       {/* 2. Konten Utama (Grid Layout 2 Kolom dengan Efek Muncul dari Samping Bergantian) */}
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10 overflow-hidden">
-
-            {/* Card 1: Data (Muncul dari Kiri) */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeLeft_0.6s_ease-out_both]" style={{ animationDelay: '600ms' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-emerald-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">1</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 border border-emerald-100 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Pengumpulan Data Pribadi</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Kami mengumpulkan informasi identitas dasar seperti nama lengkap, alamat email aktif, dan status keanggotaan saat Anda mendaftar. Data ini murni digunakan untuk keperluan sirkulasi peminjaman dan identifikasi akun yang sah.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 2: Keamanan (Muncul dari Kanan) */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeRight_0.6s_ease-out_both]" style={{ animationDelay: '700ms' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">2</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Enkripsi & Keamanan Server</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Password dan data sensitif Anda dienkripsi menggunakan standar keamanan industri terbaru. Server kami dilindungi oleh firewall berlapis untuk mencegah akses ilegal atau kebocoran data (*data breach*).
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 3: Cookies (Muncul dari Kiri) */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeLeft_0.6s_ease-out_both]" style={{ animationDelay: '800ms' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-amber-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">3</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 border border-amber-100 shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Penggunaan Cookies</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Kami menggunakan *cookies* sesi secara minimalis hanya untuk mempertahankan status *login* Anda agar tidak perlu memasukkan password berulang kali. Kami **tidak melacak** riwayat internet Anda di luar web kami.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 4: Riwayat (Muncul dari Kanan) */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeRight_0.6s_ease-out_both]" style={{ animationDelay: '900ms' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-blue-50/50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">4</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 border border-blue-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Privasi Riwayat Membaca</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Log aktivitas membaca dan riwayat peminjaman buku Anda dikumpulkan semata-mata untuk sistem rak digital pribadi Anda dan statistik agregat anonim perpustakaan, bukan untuk dipublikasikan ke publik.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 5: Pihak Ketiga (Muncul dari Kiri) */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeLeft_0.6s_ease-out_both]" style={{ animationDelay: '1000ms' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-red-50 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">5</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 border border-red-100 shadow-sm group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Tidak Ada Penjualan Data</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Kami berjanji dan menjamin secara hukum bahwa data identitas dan kontak Anda **tidak akan pernah dijual**, disewakan, atau dibagikan kepada pihak ketiga, agensi periklanan, atau entitas komersial mana pun.
-                    </p>
-                </div>
-            </div>
-
-            {/* Card 6: Hapus Data (Muncul dari Kanan) */}
-            <div className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg shadow-blue-900/5 relative overflow-hidden group hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 opacity-0 animate-[fadeRight_0.6s_ease-out_both]" style={{ animationDelay: '1100ms' }}>
-                <div className="absolute -top-4 -right-2 text-[140px] font-black text-slate-50 group-hover:text-slate-100 group-hover:scale-110 transition-all duration-500 pointer-events-none select-none z-0">6</div>
-                <div className="relative z-10 flex flex-col h-full">
-                    <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center mb-6 border border-slate-200 shadow-sm group-hover:bg-slate-600 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                    </div>
-                    <h4 className="font-black text-[#0B3A60] text-xl mb-3">Hak Penghapusan Akun</h4>
-                    <p className="text-slate-500 leading-relaxed text-sm">
-                        Anda memiliki hak penuh untuk meminta penghapusan akun beserta seluruh jejak data pribadi Anda dari server kami. Silakan hubungi admin *support* jika Anda ingin melakukan penutupan akun permanen.
-                    </p>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-)}
+                    )}
 
                 </main>
 
-             <footer className="bg-[#0B3A60] pt-16 pb-8 border-t border-white/10 mt-10 relative z-10">
-    <div className="container mx-auto px-6 max-w-6xl">
-        {/* GRID UTAMA FOOTER (4 Kolom agar tidak kosong) */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            
-            {/* Kolom 1: Tentang Platform */}
-            <div className="md:col-span-1">
-                <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200 mb-5">
-                    PustakaDigital
-                </h3>
-                <p className="text-sm text-blue-200/70 leading-relaxed">
-                    Hadir untuk memberikan akses membaca yang lebih modern dan menghubungkan Anda dengan komunitas literasi terbaik di seluruh Indonesia.
-                </p>
-            </div>
-            
-            {/* Kolom 2: Bantuan & Legalitas (Satu-satunya yang bisa diklik) */}
-            <div>
-                <h4 className="text-white font-bold mb-5 text-sm tracking-widest uppercase relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-6 after:h-0.5 after:bg-yellow-400 after:rounded-full">
-                    Layanan
-                </h4>
-                <ul className="text-sm text-blue-200/80 space-y-3">
-                    {['Pusat Bantuan', 'Kebijakan Privasi', 'Syarat & Ketentuan'].map((item, index) => {
-                        const tabKeys = ['bantuan', 'privasi', 'syarat'];
-                        return (
-                            <li key={index}>
-                                <button 
-                                    onClick={() => {
-                                        setActiveTab(tabKeys[index]);
-                                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                                    }} 
-                                    className="text-left hover:text-yellow-400 transition-colors duration-300"
-                                >
-                                    {item}
-                                </button>
-                            </li>
-                        );
-                    })}
-                </ul>
-            </div>
+            <footer className="bg-[#0B3A60] pt-16 pb-8 border-t border-white/10 mt-10 relative z-10">
+                <div className="container mx-auto px-6 max-w-6xl">
+                    {/* GRID UTAMA FOOTER (4 Kolom agar tidak kosong) */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                        
+                        {/* Kolom 1: Tentang Platform */}
+                        <div className="md:col-span-1">
+                            <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200 mb-5">
+                                PustakaDigital
+                            </h3>
+                            <p className="text-sm text-blue-200/70 leading-relaxed">
+                                Hadir untuk memberikan akses membaca yang lebih modern dan menghubungkan Anda dengan komunitas literasi terbaik di seluruh Indonesia.
+                            </p>
+                        </div>
+                        
+                        {/* Kolom 2: Bantuan & Legalitas (Satu-satunya yang bisa diklik) */}
+                        <div>
+                            <h4 className="text-white font-bold mb-5 text-sm tracking-widest uppercase relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-6 after:h-0.5 after:bg-yellow-400 after:rounded-full">
+                                Layanan
+                            </h4>
+                            <ul className="text-sm text-blue-200/80 space-y-3">
+                                {['Pusat Bantuan', 'Kebijakan Privasi', 'Syarat & Ketentuan'].map((item, index) => {
+                                    const tabKeys = ['bantuan', 'privasi', 'syarat'];
+                                    return (
+                                        <li key={index}>
+                                            <button 
+                                                onClick={() => {
+                                                    setActiveTab(tabKeys[index]);
+                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                }} 
+                                                className="text-left hover:text-yellow-400 transition-colors duration-300"
+                                            >
+                                                {item}
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
 
-            {/* Kolom 3: Lokasi & Operasional (BARU: Teks statis untuk mengisi kekosongan) */}
-            <div>
-                <h4 className="text-white font-bold mb-5 text-sm tracking-widest uppercase relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-6 after:h-0.5 after:bg-yellow-400 after:rounded-full">
-                    Kantor Pusat
-                </h4>
-                <div className="text-sm text-blue-200/70 space-y-3">
-                    <p className="leading-relaxed">
-                        Gedung Literasi Bangsa Lt. 4<br />
-                        Jl. Sudirman No. 123<br />
-                        Jakarta Selatan, 12190
-                    </p>
-                    <div className="pt-3 border-t border-white/5 mt-3">
-                        <span className="block text-yellow-400 font-medium mb-1 text-xs">Jam Operasional:</span>
-                        <p>Senin - Jumat: 08.00 - 17.00</p>
+                        {/* Kolom 3: Lokasi & Operasional (BARU: Teks statis untuk mengisi kekosongan) */}
+                        <div>
+                            <h4 className="text-white font-bold mb-5 text-sm tracking-widest uppercase relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-6 after:h-0.5 after:bg-yellow-400 after:rounded-full">
+                                Kantor Pusat
+                            </h4>
+                            <div className="text-sm text-blue-200/70 space-y-3">
+                                <p className="leading-relaxed">
+                                    Gedung Literasi Bangsa Lt. 4<br />
+                                    Jl. Sudirman No. 123<br />
+                                    Jakarta Selatan, 12190
+                                </p>
+                                <div className="pt-3 border-t border-white/5 mt-3">
+                                    <span className="block text-yellow-400 font-medium mb-1 text-xs">Jam Operasional:</span>
+                                    <p>Senin - Jumat: 08.00 - 17.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Kolom 4: Hubungi Kami (Statis & Ikon Diperkecil) */}
+                        <div>
+                            <h4 className="text-white font-bold mb-5 text-sm tracking-widest uppercase relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-6 after:h-0.5 after:bg-yellow-400 after:rounded-full">
+                                Hubungi Kami
+                            </h4>
+                            <div className="flex flex-col gap-3">
+                                
+                                {/* Instagram */}
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-yellow-400">
+                                        <svg fill="currentColor" viewBox="0 0 24 24" className="w-3.5 h-3.5"><path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" /></svg>
+                                    </div>
+                                    <span className="text-[13px] font-medium text-blue-200/80">
+                                        @pustakadigital
+                                    </span>
+                                </div>
+                                
+                                {/* X / Twitter */}
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-yellow-400">
+                                        <svg fill="currentColor" viewBox="0 0 24 24" className="w-3 h-3"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                    </div>
+                                    <span className="text-[13px] font-medium text-blue-200/80">
+                                        @pustakadigital
+                                    </span>
+                                </div>
+                                
+                                {/* Email */}
+                                <div className="flex items-center gap-3">
+                                    <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-yellow-400">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    </div>
+                                    <span className="text-[13px] font-medium text-blue-200/80">
+                                        support@pustakadigital.com
+                                    </span>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    {/* BARIS TERBAWAH: HAK CIPTA */}
+                    <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-center">
+                        <p className="text-blue-200/50 text-xs font-medium">
+                            &copy; {new Date().getFullYear()} PustakaDigital. Hak Cipta Dilindungi.
+                        </p>
+                        <p className="text-blue-200/40 text-[10px] font-semibold tracking-widest uppercase">
+                            Literasi Dalam Satu Klik.
+                        </p>
                     </div>
                 </div>
-            </div>
-            
-            {/* Kolom 4: Hubungi Kami (Statis & Ikon Diperkecil) */}
-            <div>
-                <h4 className="text-white font-bold mb-5 text-sm tracking-widest uppercase relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-6 after:h-0.5 after:bg-yellow-400 after:rounded-full">
-                    Hubungi Kami
-                </h4>
-                <div className="flex flex-col gap-3">
-                    
-                    {/* Instagram */}
-                    <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-yellow-400">
-                            <svg fill="currentColor" viewBox="0 0 24 24" className="w-3.5 h-3.5"><path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" /></svg>
-                        </div>
-                        <span className="text-[13px] font-medium text-blue-200/80">
-                            @pustakadigital
-                        </span>
-                    </div>
-                    
-                    {/* X / Twitter */}
-                    <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-yellow-400">
-                            <svg fill="currentColor" viewBox="0 0 24 24" className="w-3 h-3"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        </div>
-                        <span className="text-[13px] font-medium text-blue-200/80">
-                            @pustakadigital
-                        </span>
-                    </div>
-                    
-                    {/* Email */}
-                    <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center text-yellow-400">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        </div>
-                        <span className="text-[13px] font-medium text-blue-200/80">
-                            support@pustakadigital.com
-                        </span>
-                    </div>
-                    
-                </div>
-            </div>
-
-        </div>
-        
-        {/* BARIS TERBAWAH: HAK CIPTA */}
-        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-center">
-            <p className="text-blue-200/50 text-xs font-medium">
-                &copy; {new Date().getFullYear()} PustakaDigital. Hak Cipta Dilindungi.
-            </p>
-            <p className="text-blue-200/40 text-[10px] font-semibold tracking-widest uppercase">
-                Literasi Dalam Satu Klik.
-            </p>
-        </div>
-    </div>
-</footer>
+            </footer>
 
                 {selectedCategory !== null && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
@@ -1168,14 +1167,14 @@ export default function Welcome({ auth, koleksiBuku = [] }) {
                 @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
                 @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
                 @keyframes fadeLeft { 
-    from { opacity: 0; transform: translateX(-50px); } 
-    to { opacity: 1; transform: translateX(0); } 
-}
+                    from { opacity: 0; transform: translateX(-50px); } 
+                    to { opacity: 1; transform: translateX(0); } 
+                }
 
-@keyframes fadeRight { 
-    from { opacity: 0; transform: translateX(50px); } 
-    to { opacity: 1; transform: translateX(0); } 
-}
+                @keyframes fadeRight { 
+                    from { opacity: 0; transform: translateX(50px); } 
+                    to { opacity: 1; transform: translateX(0); } 
+                }
             `}</style>
         </>
     );
