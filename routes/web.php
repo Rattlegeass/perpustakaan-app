@@ -9,6 +9,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StrukController;
+use App\Http\Controllers\MemberController;
 use App\Models\Buku;
 
 Route::get('/', function () {
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::resource('bukus', BukuController::class);
     Route::resource('peminjamans', PeminjamanController::class);
+    Route::resource('members', MemberController::class);
     
     // Route untuk approve peminjaman (ubah pending menjadi menunggu pengambilan)
     Route::patch('/peminjamans/{peminjaman}/approve', [PeminjamanController::class, 'approve'])->name('peminjamans.approve');
