@@ -51,6 +51,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Route untuk approve peminjaman (ubah pending menjadi menunggu pengambilan)
     Route::patch('/peminjamans/{peminjaman}/approve', [PeminjamanController::class, 'approve'])->name('peminjamans.approve');
     
+    // Route untuk reject peminjaman (ubah pending menjadi ditolak)
+    Route::patch('/peminjamans/{peminjaman}/reject', [PeminjamanController::class, 'reject'])->name('peminjamans.reject');
+    
     // Route untuk confirm pickup (ubah menunggu pengambilan menjadi dipinjam dengan deadline +7 hari)
     Route::patch('/peminjamans/{peminjaman}/confirm-pickup', [PeminjamanController::class, 'confirmPickup'])->name('peminjamans.confirmPickup');
 

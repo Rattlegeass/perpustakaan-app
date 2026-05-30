@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('tgl_peminjaman')->nullable();  // Nullable - set saat member ambil buku
             $table->date('batas_tgl_peminjaman')->nullable();  // Nullable - set saat member ambil buku (tgl_peminjaman + 7 hari)
-            $table->enum('status_peminjaman', ['menunggu_persetujuan', 'menunggu_pengambilan', 'dipinjam', 'dikembalikan', 'terlambat'])->default('menunggu_persetujuan');
+            $table->enum('status_peminjaman', ['menunggu_persetujuan', 'menunggu_pengambilan', 'dipinjam', 'dikembalikan', 'terlambat', 'ditolak'])->default('menunggu_persetujuan');
+            $table->string('catatan_penolakan')->nullable();
             $table->timestamps();
         });
     }

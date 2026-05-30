@@ -6,7 +6,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const flash = usePage().props.flash || {};
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
+    const notifications = usePage().props.auth.notifications || [];
     const [showNotifications, setShowNotifications] = useState(false);
     const [toast, setToast] = useState(null);
 

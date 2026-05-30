@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             'penulis' => 'Andrea Hirata',
             'penerbit' => 'Bentang Pustaka',
             'tahun_terbit' => 2005,
-            'stok' => 5,
+            'stok' => 1,
             'kategori' => 'fiksi',
             'sinopsis' => 'Laskar Pelangi adalah kisah inspiratif tentang sepuluh anak muda dari keluarga yang kurang mampu di Belitung. Dengan determinasi dan semangat yang luar biasa, mereka berjuang mengenyam pendidikan meski penuh keterbatasan. Novel ini mengajarkan tentang kekuatan mimpi dan pentingnya pendidikan dalam mengubah nasib.',
         ]);

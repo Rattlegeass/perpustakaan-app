@@ -13,6 +13,7 @@ class Peminjaman extends Model
         'tgl_peminjaman',
         'batas_tgl_peminjaman',
         'status_peminjaman',
+        'catatan_penolakan',
     ];
 
     protected $casts = [

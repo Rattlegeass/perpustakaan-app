@@ -19,6 +19,8 @@ export default function IndexMember({ peminjamans, filters }) {
                 return 'bg-green-100 text-green-800';
             case 'terlambat':
                 return 'bg-red-100 text-red-800';
+            case 'ditolak':
+                return 'bg-rose-100 text-rose-800';
             default:
                 return 'bg-slate-100 text-slate-800';
         }
@@ -36,6 +38,8 @@ export default function IndexMember({ peminjamans, filters }) {
                 return '✅';
             case 'terlambat':
                 return '⏰';
+            case 'ditolak':
+                return '❌';
             default:
                 return '❓';
         }
@@ -53,6 +57,8 @@ export default function IndexMember({ peminjamans, filters }) {
                 return 'Sudah Dikembalikan';
             case 'terlambat':
                 return 'Terlambat';
+            case 'ditolak':
+                return 'Ditolak';
             default:
                 return status;
         }
@@ -140,6 +146,14 @@ export default function IndexMember({ peminjamans, filters }) {
                                             <p className="text-sm font-bold text-slate-800 mt-1">{pinjam.detail_peminjaman?.length || 0} Buku</p>
                                         </div>
                                     </div>
+
+                                    {/* Catatan Penolakan Info */}
+                                    {pinjam.status_peminjaman === 'ditolak' && pinjam.catatan_penolakan && (
+                                         <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 space-y-1">
+                                             <p className="text-sm font-bold text-rose-800">❌ Catatan Penolakan:</p>
+                                             <p className="text-xs text-rose-700 font-semibold">{pinjam.catatan_penolakan}</p>
+                                         </div>
+                                     )}
 
                                     {/* Denda Info */}
                                     {(() => {
