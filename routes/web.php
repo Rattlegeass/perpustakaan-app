@@ -64,8 +64,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/struks/{struk}/preview', [StrukController::class, 'preview'])->name('struks.preview');
     Route::post('/struks/{struk}/regenerate', [StrukController::class, 'regenerate'])->name('struks.regenerate');
 
-    Route::get('/reports/pdf', [ReportController::class, 'exportPdf']);
-    Route::get('/reports/excel', [ReportController::class, 'exportExcel']);
+   // Cari bagian ini di dalam web.php kamu dan sesuaikan ->name()-nya:
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/pdf', [ReportController::class, 'exportPdf'])->name('reports.pdf'); // Diubah
+    Route::get('/reports/excel', [ReportController::class, 'exportExcel'])->name('reports.excel'); // Diubah
 });
 
 // --- MEMBER & UMUM (AUTH) ROUTES ---

@@ -45,7 +45,8 @@ export default function AuthenticatedLayout({ header, children }) {
                 {
                     title: 'Report',
                     icon: '📈',
-                    href: '/reports/pdf',
+                    href: route('reports.index'), 
+                    active: route().current('reports.index'),
                 },
                 {
                     title: 'Manajemen Member',
@@ -219,30 +220,18 @@ export default function AuthenticatedLayout({ header, children }) {
                 {/* SIDEBAR - Desktop */}
                 <aside className="hidden lg:flex lg:w-64 bg-white border-r border-slate-200 flex-col">
                     <nav className="flex-1 p-6 space-y-2">
-                        {menuItems.map((menu) => (
-                            menu.title === 'Report' ? (
-                                <a
-                                    key={menu.title}
-                                    href={menu.href}
-                                    download
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-slate-600 hover:bg-slate-50 hover:text-[#0B3A60]`}
-                                >
-                                    <span className="text-xl">{menu.icon}</span>
-                                    <span className="text-sm font-semibold">{menu.title}</span>
-                                </a>
-                            ) : (
-                                <Link
-                                    key={menu.title}
-                                    href={menu.href}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
-                                        ? 'bg-blue-100 text-[#0B3A60] font-bold shadow-sm'
-                                        : 'text-slate-600 hover:bg-slate-50 hover:text-[#0B3A60]'
-                                        }`}
-                                >
-                                    <span className="text-xl">{menu.icon}</span>
-                                    <span className="text-sm font-semibold">{menu.title}</span>
-                                </Link>
-                            )
+                       {menuItems.map((menu) => (
+                            <Link
+                                key={menu.title}
+                                href={menu.href}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
+                                    ? 'bg-blue-100 text-[#0B3A60] font-bold shadow-sm'
+                                    : 'text-slate-600 hover:bg-slate-50 hover:text-[#0B3A60]'
+                                    }`}
+                            >
+                                <span className="text-xl">{menu.icon}</span>
+                                <span className="text-sm font-semibold">{menu.title}</span>
+                            </Link>
                         ))}
                     </nav>
 
@@ -266,33 +255,20 @@ export default function AuthenticatedLayout({ header, children }) {
                         {/* Sidebar Panel */}
                         <div className="absolute left-0 top-20 bottom-0 w-64 bg-white shadow-xl border-r border-slate-200 overflow-y-auto">
                             <nav className="p-6 space-y-2">
-                                {menuItems.map((menu) => (
-                                    menu.title === 'Report' ? (
-                                        <a
-                                            key={menu.title}
-                                            href={menu.href}
-                                            download
-                                            onClick={() => setSidebarOpen(false)}
-                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-slate-600 hover:bg-slate-50`}
-                                        >
-                                            <span className="text-xl">{menu.icon}</span>
-                                            <span className="text-sm font-semibold">{menu.title}</span>
-                                        </a>
-                                    ) : (
-                                        <Link
-                                            key={menu.title}
-                                            href={menu.href}
-                                            onClick={() => setSidebarOpen(false)}
-                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
-                                                ? 'bg-blue-100 text-[#0B3A60] font-bold'
-                                                : 'text-slate-600 hover:bg-slate-50'
-                                                }`}
-                                        >
-                                            <span className="text-xl">{menu.icon}</span>
-                                            <span className="text-sm font-semibold">{menu.title}</span>
-                                        </Link>
-                                    )
-                                ))}
+                               {menuItems.map((menu) => (
+                                <Link
+                                    key={menu.title}
+                                    href={menu.href}
+                                    onClick={() => setSidebarOpen(false)}
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
+                                        ? 'bg-blue-100 text-[#0B3A60] font-bold'
+                                        : 'text-slate-600 hover:bg-slate-50'
+                                        }`}
+                                >
+                                    <span className="text-xl">{menu.icon}</span>
+                                    <span className="text-sm font-semibold">{menu.title}</span>
+                                </Link>
+                            ))}
                             </nav>
                         </div>
                     </div>
