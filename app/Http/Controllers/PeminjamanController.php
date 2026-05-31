@@ -239,8 +239,8 @@ class PeminjamanController extends Controller
             return redirect('/peminjamans')->with('error', 'Peminjaman tidak ditemukan');
         }
 
-        if ($peminjaman->status_peminjaman === 'dipinjam' || $peminjaman->status_peminjaman === 'terlambat') {
-            // Kembalikan stok buku jika peminjaman masih dipinjam / terlambat
+        if ($peminjaman->status_peminjaman === 'dipinjam' || $peminjaman->status_peminjaman === 'terlambat' || $peminjaman->status_peminjaman === 'menunggu_pengambilan') {
+            // Kembalikan stok buku jika peminjaman masih dipinjam / terlambat / menunggu_pengambilan
             foreach ($peminjaman->detailPeminjaman as $detail) {
                 if ($detail->status_buku === 'dipinjam') {
                     $buku = Buku::find($detail->buku_id);
@@ -276,10 +276,52 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Hanya peminjaman yang menunggu persetujuan yang dapat disetujui');
         }
 
-        // Update peminjaman status ke menunggu_pengambilan (belum set tanggal, belum decrement stok)
+        // Check stock availability for all books in the borrowing
+        foreach ($peminjaman->detailPeminjaman as $detail) {
+            $buku = Buku::find($detail->buku_id);
+            if (!$buku || $buku->stok <= 0) {
+                // Auto-reject this loan itself since the book is out of stock
+                $peminjaman->update([
+                    'status_peminjaman' => 'ditolak',
+                    'catatan_penolakan' => 'Buku "' . ($buku->judul ?? 'Buku') . '" kehabisan stok.'
+                ]);
+                return back()->with([
+                    'error' => 'Gagal menyetujui. Buku "' . ($buku->judul ?? 'Buku') . '" kehabisan stok. Peminjaman ini otomatis diubah menjadi ditolak.',
+                ]);
+            }
+        }
+
+        // Update peminjaman status ke menunggu_pengambilan
         $peminjaman->update([
             'status_peminjaman' => 'menunggu_pengambilan',
         ]);
+
+        // Decrement stok buku immediately (Booking) and handle auto-reject for other pending loans if stock reaches 0
+        foreach ($peminjaman->detailPeminjaman as $detail) {
+            $buku = Buku::find($detail->buku_id);
+            if ($buku) {
+                $buku->decrement('stok');
+                
+                // If stock reaches 0, auto-reject other pending borrowings for this book
+                if ($buku->stok <= 0) {
+                    $otherPendingDetails = DetailPeminjaman::where('buku_id', $buku->id)
+                        ->whereHas('peminjaman', function ($q) {
+                            $q->where('status_peminjaman', 'menunggu_persetujuan');
+                        })
+                        ->get();
+
+                    foreach ($otherPendingDetails as $otherDetail) {
+                        $otherPeminjaman = $otherDetail->peminjaman;
+                        if ($otherPeminjaman) {
+                            $otherPeminjaman->update([
+                                'status_peminjaman' => 'ditolak',
+                                'catatan_penolakan' => 'Buku "' . $buku->judul . '" sudah habis dibooking/dipesan oleh member lain.'
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
 
         // Generate struk
         app(StrukController::class)->generate($peminjaman);
@@ -293,6 +335,46 @@ class PeminjamanController extends Controller
                 'type' => 'success',
                 'title' => '✅ Peminjaman Disetujui',
                 'message' => 'Buku "' . $bukuNames . '" siap diambil oleh ' . $peminjaman->user->name
+            ]
+        ]);
+    }
+
+    public function reject(string $id)
+    {
+        $peminjaman = Peminjaman::with('detailPeminjaman.buku')->find($id);
+
+        if (!$peminjaman) {
+            return back()->with('error', 'Peminjaman tidak ditemukan');
+        }
+
+        if (!in_array($peminjaman->status_peminjaman, ['menunggu_persetujuan', 'menunggu_pengambilan'])) {
+            return back()->with('error', 'Hanya peminjaman yang menunggu persetujuan atau pengambilan yang dapat ditolak');
+        }
+
+        // Jika statusnya menunggu_pengambilan, kembalikan stok buku yang sudah dibooking/dikurangi
+        if ($peminjaman->status_peminjaman === 'menunggu_pengambilan') {
+            foreach ($peminjaman->detailPeminjaman as $detail) {
+                $buku = Buku::find($detail->buku_id);
+                if ($buku) {
+                    $buku->increment('stok');
+                }
+            }
+        }
+
+        $peminjaman->update([
+            'status_peminjaman' => 'ditolak',
+            'catatan_penolakan' => 'Ditolak secara manual oleh admin.'
+        ]);
+
+        // Generate struk
+        app(StrukController::class)->generate($peminjaman);
+
+        return back()->with([
+            'success' => 'Peminjaman berhasil ditolak!',
+            'notification' => [
+                'type' => 'warning',
+                'title' => '❌ Peminjaman Ditolak',
+                'message' => 'Peminjaman oleh member ' . $peminjaman->user->name . ' telah ditolak.'
             ]
         ]);
     }
@@ -327,14 +409,6 @@ class PeminjamanController extends Controller
             'batas_tgl_peminjaman' => $batasTgl,
             'status_peminjaman' => 'dipinjam',
         ]);
-
-        // Decrement stok buku untuk setiap detail peminjaman
-        foreach ($peminjaman->detailPeminjaman as $detail) {
-            $buku = Buku::find($detail->buku_id);
-            if ($buku && $buku->stok > 0) {
-                $buku->decrement('stok');
-            }
-        }
 
         // Generate struk
         app(StrukController::class)->generate($peminjaman);
@@ -431,11 +505,16 @@ class PeminjamanController extends Controller
             return back()->withErrors('Peminjaman tidak ditemukan');
         }
 
-        if (!in_array($peminjaman->status_peminjaman, ['menunggu_persetujuan', 'menunggu_pengambilan'])) {
-            return back()->withErrors('Hanya peminjaman yang menunggu persetujuan atau pengambilan yang dapat dibatalkan');
+        if ($peminjaman->status_peminjaman === 'menunggu_pengambilan') {
+            foreach ($peminjaman->detailPeminjaman as $detail) {
+                $buku = Buku::find($detail->buku_id);
+                if ($buku) {
+                    $buku->increment('stok');
+                }
+            }
         }
 
-        // Delete peminjaman (no stock increment needed since stock is only decremented on confirmPickup)
+        // Delete peminjaman
         $peminjaman->delete();
 
         return redirect('/peminjamans-saya')->with('success', 'Peminjaman berhasil dibatalkan');

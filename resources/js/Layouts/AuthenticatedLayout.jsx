@@ -6,7 +6,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const flash = usePage().props.flash || {};
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
+    const notifications = usePage().props.auth.notifications || [];
     const [showNotifications, setShowNotifications] = useState(false);
     const [toast, setToast] = useState(null);
 
@@ -46,6 +46,12 @@ export default function AuthenticatedLayout({ header, children }) {
                     title: 'Report',
                     icon: '📈',
                     href: '/reports/pdf',
+                },
+                {
+                    title: 'Manajemen Member',
+                    icon: '👥',
+                    href: route('members.index'),
+                    active: route().current('members.*'),
                 },
             ];
         } else {
@@ -178,9 +184,11 @@ export default function AuthenticatedLayout({ header, children }) {
                                             <p className="text-xs text-slate-500 truncate">{user.email}</p>
                                         </div>
                                     </div>
-                                    <Dropdown.Link href={route('profile.show')} className="px-4 py-2 text-sm hover:bg-slate-50">
-                                        ⚙️ Pengaturan Profile
-                                    </Dropdown.Link>
+                                    {user.role !== 'admin' &&
+                                        <Dropdown.Link href={route('profile.show')} className="px-4 py-2 text-sm hover:bg-slate-50">
+                                            ⚙️ Pengaturan Profile
+                                        </Dropdown.Link>
+                                    }
                                     <Dropdown.Link
                                         href={route('logout')}
                                         method="post"
@@ -227,8 +235,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                     key={menu.title}
                                     href={menu.href}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
-                                            ? 'bg-blue-100 text-[#0B3A60] font-bold shadow-sm'
-                                            : 'text-slate-600 hover:bg-slate-50 hover:text-[#0B3A60]'
+                                        ? 'bg-blue-100 text-[#0B3A60] font-bold shadow-sm'
+                                        : 'text-slate-600 hover:bg-slate-50 hover:text-[#0B3A60]'
                                         }`}
                                 >
                                     <span className="text-xl">{menu.icon}</span>
@@ -276,8 +284,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                             href={menu.href}
                                             onClick={() => setSidebarOpen(false)}
                                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
-                                                    ? 'bg-blue-100 text-[#0B3A60] font-bold'
-                                                    : 'text-slate-600 hover:bg-slate-50'
+                                                ? 'bg-blue-100 text-[#0B3A60] font-bold'
+                                                : 'text-slate-600 hover:bg-slate-50'
                                                 }`}
                                         >
                                             <span className="text-xl">{menu.icon}</span>
@@ -309,12 +317,12 @@ export default function AuthenticatedLayout({ header, children }) {
             {toast && (
                 <div className="fixed bottom-6 right-6 z-50">
                     <div className={`px-6 py-4 rounded-lg shadow-2xl border-l-4 animate-in fade-in slide-in-from-bottom-4 duration-300 ${toast.type === 'success'
-                            ? 'bg-green-50 border-green-500 text-green-800'
-                            : toast.type === 'warning'
-                                ? 'bg-orange-50 border-orange-500 text-orange-800'
-                                : toast.type === 'error'
-                                    ? 'bg-red-50 border-red-500 text-red-800'
-                                    : 'bg-blue-50 border-blue-500 text-blue-800'
+                        ? 'bg-green-50 border-green-500 text-green-800'
+                        : toast.type === 'warning'
+                            ? 'bg-orange-50 border-orange-500 text-orange-800'
+                            : toast.type === 'error'
+                                ? 'bg-red-50 border-red-500 text-red-800'
+                                : 'bg-blue-50 border-blue-500 text-blue-800'
                         }`}>
                         <p className="font-bold text-sm">{toast.title}</p>
                         <p className="text-xs mt-1 opacity-90">{toast.message}</p>

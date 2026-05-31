@@ -285,11 +285,14 @@ function AdminDashboard({ data }) {
                                         </td>
                                         {/* Status */}
                                         <td className="px-6 py-4 text-center">
-                                            <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black ${loan.status_peminjaman === 'dikembalikan' ? 'bg-green-100 text-green-800' :
+                                            <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black ${
+                                                loan.status_peminjaman === 'dikembalikan' ? 'bg-green-100 text-green-800' :
                                                 loan.status_peminjaman === 'terlambat' ? 'bg-red-100 text-red-800' :
-                                                    loan.status_peminjaman === 'dipinjam' ? 'bg-blue-100 text-blue-800' :
-                                                        'bg-yellow-100 text-yellow-800'
-                                                }`}>
+                                                loan.status_peminjaman === 'dipinjam' ? 'bg-blue-100 text-blue-800' :
+                                                loan.status_peminjaman === 'ditolak' ? 'bg-rose-100 text-rose-800' :
+                                                loan.status_peminjaman === 'menunggu_pengambilan' ? 'bg-orange-100 text-orange-800' :
+                                                'bg-yellow-100 text-yellow-800'
+                                            }`}>
                                                 {loan.status_peminjaman.replace('_', ' ').toUpperCase()}
                                             </span>
                                         </td>
@@ -315,19 +318,25 @@ function MemberDashboard({ data }) {
     const user = usePage().props.auth.user;
 
     // Hitung countdown atau denda per peminjaman
-    const getCountdownText = (batasTgl) => {
-        if (!batasTgl) return { text: '⏳ Menunggu Persetujuan', color: 'text-slate-500 bg-slate-100' };
+    const getCountdownText = (loan) => {
+        if (loan.status_peminjaman === 'menunggu_persetujuan') {
+            return { text: '⏳ Menunggu Persetujuan', color: 'text-yellow-800 bg-yellow-100 border border-yellow-200 font-semibold' };
+        }
+        if (loan.status_peminjaman === 'menunggu_pengambilan') {
+            return { text: '📦 Siap Diambil', color: 'text-orange-800 bg-orange-100 border border-orange-200 font-bold' };
+        }
+        if (!loan.batas_tgl_peminjaman) return { text: '⏳ Menunggu Persetujuan', color: 'text-slate-500 bg-slate-100' };
 
         const now = new Date();
         now.setHours(0, 0, 0, 0);
-        const due = new Date(batasTgl);
+        const due = new Date(loan.batas_tgl_peminjaman);
         due.setHours(0, 0, 0, 0);
 
         const diffTime = due - now;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         if (diffDays < 0) {
-            return { text: `⏰ Terlambat ${Math.abs(diffDays)} hari!`, color: 'text-red-700 bg-red-100 border border-red-200 animate-pulse' };
+            return { text: `⏰ Terlambat ${Math.abs(diffDays)} hari!`, color: 'text-red-700 bg-red-100 border border-red-200 animate-pulse font-bold' };
         } else if (diffDays === 0) {
             return { text: '⏰ Hari ini batas pengembalian!', color: 'text-orange-700 bg-orange-100 border border-orange-200 font-bold' };
         } else if (diffDays <= 2) {
@@ -401,9 +410,9 @@ function MemberDashboard({ data }) {
                     </div>
 
                     <div className="space-y-4">
-                        {data.myLoans && data.myLoans.some(l => l.status_peminjaman !== 'dikembalikan') ? (
+                        {data.myLoans && data.myLoans.some(l => l.status_peminjaman !== 'dikembalikan' && l.status_peminjaman !== 'ditolak') ? (
                             data.myLoans
-                                .filter(l => l.status_peminjaman !== 'dikembalikan')
+                                .filter(l => l.status_peminjaman !== 'dikembalikan' && l.status_peminjaman !== 'ditolak')
                                 .map((loan) => (
                                     <div key={loan.id} className="border border-slate-100 rounded-xl p-4 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                         <div className="space-y-1">
@@ -426,7 +435,7 @@ function MemberDashboard({ data }) {
 
                                         <div className="shrink-0 flex items-center md:flex-col gap-3 justify-between">
                                             {(() => {
-                                                const countdown = getCountdownText(loan.batas_tgl_peminjaman);
+                                                const countdown = getCountdownText(loan);
                                                 return (
                                                     <span className={`inline-block px-3 py-1.5 rounded-full text-xs font-bold ${countdown.color}`}>
                                                         {countdown.text}

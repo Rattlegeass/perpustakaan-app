@@ -15,6 +15,8 @@ export default function Show({ peminjaman }) {
                 return 'bg-green-100 text-green-800';
             case 'terlambat':
                 return 'bg-red-100 text-red-800';
+            case 'ditolak':
+                return 'bg-rose-100 text-rose-800';
             default:
                 return 'bg-gray-100 text-gray-800';
         }
@@ -32,6 +34,8 @@ export default function Show({ peminjaman }) {
                 return '✅ Sudah Dikembalikan';
             case 'terlambat':
                 return '⏰ Terlambat';
+            case 'ditolak':
+                return '❌ Ditolak';
             default:
                 return status;
         }
@@ -91,8 +95,14 @@ export default function Show({ peminjaman }) {
                         <div className="space-y-4">
                             <div>
                                 <p className="text-slate-600 text-sm font-semibold uppercase">Status</p>
-                                <span className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${getStatusColor(peminjaman.status_peminjaman)}`}>{ peminjaman.status_peminjaman }</span>
+                                <span className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${getStatusColor(peminjaman.status_peminjaman)}`}>{ getStatusLabel(peminjaman.status_peminjaman) }</span>
                             </div>
+                            {peminjaman.status_peminjaman === 'ditolak' && peminjaman.catatan_penolakan && (
+                                <div className="bg-rose-50 border-l-4 border-rose-500 p-4 rounded mt-2">
+                                    <p className="text-xs text-rose-800 font-bold uppercase tracking-wider">Catatan Penolakan</p>
+                                    <p className="font-bold text-slate-800 text-sm">{peminjaman.catatan_penolakan}</p>
+                                </div>
+                            )}
                             <div>
                                 <p className="text-slate-600 text-sm font-semibold uppercase">Tgl Pinjam</p>
                                 <p className="font-semibold text-slate-800">{formatDate(peminjaman.tgl_peminjaman)}</p>

@@ -80,9 +80,11 @@ export default function Edit({ peminjaman }) {
                     <div className="flex items-center justify-between border-b pb-4 mb-6">
                         <h2 className="text-xl font-bold text-slate-800">📋 Rincian Transaksi Peminjaman</h2>
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            peminjaman.status_peminjaman === 'terlambat' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                            peminjaman.status_peminjaman === 'terlambat' ? 'bg-red-100 text-red-700' : 
+                            peminjaman.status_peminjaman === 'ditolak' ? 'bg-rose-100 text-rose-700' :
+                            'bg-blue-100 text-blue-700'
                         }`}>
-                            {peminjaman.status_peminjaman?.toUpperCase()}
+                            {peminjaman.status_peminjaman?.replace('_', ' ')?.toUpperCase()}
                         </span>
                     </div>
                     

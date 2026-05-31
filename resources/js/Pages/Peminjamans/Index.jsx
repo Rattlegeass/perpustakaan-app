@@ -5,6 +5,7 @@ import { formatDate } from '@/Utils/dateFormatter';
 
 export default function Index({ peminjamans, filters }) {
     const [deleteConfirm, setDeleteConfirm] = useState(null);
+    const [rejectConfirm, setRejectConfirm] = useState(null);
 
     const getStatusColor = (status) => {
         switch(status) {
@@ -18,6 +19,8 @@ export default function Index({ peminjamans, filters }) {
                 return 'bg-green-100 text-green-800';
             case 'terlambat':
                 return 'bg-red-100 text-red-800';
+            case 'ditolak':
+                return 'bg-rose-100 text-rose-800';
             default:
                 return 'bg-slate-100 text-slate-800';
         }
@@ -35,6 +38,8 @@ export default function Index({ peminjamans, filters }) {
                 return '✅';
             case 'terlambat':
                 return '⏰';
+            case 'ditolak':
+                return '❌';
             default:
                 return '❓';
         }
@@ -52,6 +57,8 @@ export default function Index({ peminjamans, filters }) {
                 return 'Sudah Dikembalikan';
             case 'terlambat':
                 return 'Terlambat';
+            case 'ditolak':
+                return 'Ditolak';
             default:
                 return status;
         }
@@ -70,6 +77,12 @@ export default function Index({ peminjamans, filters }) {
             onSuccess: () => {
                 // Refresh will happen automatically
             }
+        });
+    };
+
+    const handleReject = (id) => {
+        router.patch(`/peminjamans/${id}/reject`, {}, {
+            onSuccess: () => setRejectConfirm(null),
         });
     };
 
@@ -180,30 +193,67 @@ export default function Index({ peminjamans, filters }) {
                                                     ↩️ Kembali
                                                 </a>
                                             )}
+                                            {/* Tombol Tolak (Hanya untuk pending / siap ambil) */}
                                             {(pinjam.status_peminjaman === 'menunggu_persetujuan' || pinjam.status_peminjaman === 'menunggu_pengambilan') && (
-                                                <button
-                                                    onClick={() => setDeleteConfirm(deleteConfirm === pinjam.id ? null : pinjam.id)}
-                                                    className="px-3 py-1.5 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
-                                                >
-                                                    {deleteConfirm === pinjam.id ? '❌ Yakin?' : '🗑️ Tolak'}
-                                                </button>
+                                                <div className="inline-flex items-center gap-1">
+                                                    {rejectConfirm === pinjam.id ? (
+                                                        <>
+                                                            <button
+                                                                onClick={() => handleReject(pinjam.id)}
+                                                                className="px-2.5 py-1.5 bg-rose-600 text-white text-xs font-bold rounded-lg hover:bg-rose-700 transition-colors"
+                                                            >
+                                                                Ya, Tolak
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setRejectConfirm(null)}
+                                                                className="px-2 py-1.5 bg-slate-500 text-white text-xs font-bold rounded-lg hover:bg-slate-600 transition-colors"
+                                                            >
+                                                                Batal
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => {
+                                                                setRejectConfirm(pinjam.id);
+                                                                setDeleteConfirm(null);
+                                                            }}
+                                                            className="px-3 py-1.5 bg-rose-500 text-white text-xs font-bold rounded-lg hover:bg-rose-600 transition-colors"
+                                                        >
+                                                            ❌ Tolak
+                                                        </button>
+                                                    )}
+                                                </div>
                                             )}
-                                            {pinjam.status_peminjaman !== 'menunggu_persetujuan' && pinjam.status_peminjaman !== 'menunggu_pengambilan' && (
-                                                <button
-                                                    onClick={() => setDeleteConfirm(deleteConfirm === pinjam.id ? null : pinjam.id)}
-                                                    className="px-3 py-1.5 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
-                                                >
-                                                    {deleteConfirm === pinjam.id ? '❌ Yakin?' : '🗑️ Hapus'}
-                                                </button>
-                                            )}
-                                            {deleteConfirm === pinjam.id && (
-                                                <button
-                                                    onClick={() => handleDelete(pinjam.id)}
-                                                    className="px-2 py-1.5 bg-red-700 text-white text-xs font-bold rounded-lg"
-                                                >
-                                                    Ya
-                                                </button>
-                                            )}
+
+                                            {/* Tombol Hapus (Untuk semua status) */}
+                                            <div className="inline-flex items-center gap-1">
+                                                {deleteConfirm === pinjam.id ? (
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleDelete(pinjam.id)}
+                                                            className="px-2.5 py-1.5 bg-red-700 text-white text-xs font-bold rounded-lg hover:bg-red-800 transition-colors"
+                                                        >
+                                                            Ya, Hapus
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setDeleteConfirm(null)}
+                                                            className="px-2 py-1.5 bg-slate-500 text-white text-xs font-bold rounded-lg hover:bg-slate-600 transition-colors"
+                                                        >
+                                                            Batal
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => {
+                                                            setDeleteConfirm(pinjam.id);
+                                                            setRejectConfirm(null);
+                                                        }}
+                                                        className="px-3 py-1.5 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
+                                                    >
+                                                        🗑️ Hapus
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
