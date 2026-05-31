@@ -11,17 +11,9 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StrukController;
 use App\Models\Buku;
 
+// Menggunakan Route::get('/') yang sudah mengambil koleksiBuku
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-route::get('/', function () {
-    // 2. Ambil data 10 buku terbaru untuk ditampilkan di depan
+    // Ambil data 10 buku terbaru untuk ditampilkan di depan
     $koleksiBuku = Buku::latest()->take(10)->get();
 
     return Inertia::render('Welcome', [
@@ -29,21 +21,23 @@ route::get('/', function () {
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-        'koleksiBuku' => $koleksiBuku, // 3. Kirim datanya ke React di sini
+        'koleksiBuku' => $koleksiBuku, // Kirim datanya ke React di sini
     ]);
 });
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 
-// ADMIN ROUTES
+// --- ADMIN ROUTES ---
 Route::middleware(['auth', 'admin'])->group(function () {
+    
+    // CATATAN: Rute profil di sini saya hapus/komentari agar tidak terjadi 
+    // bentrok (collision) dengan rute profil di grup 'auth' di bawah.
+    // Karena Admin juga melewati middleware 'auth', mereka tetap bisa mengakses profil.
+    /*
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    */
 
     Route::resource('bukus', BukuController::class);
     Route::resource('peminjamans', PeminjamanController::class);
@@ -69,11 +63,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/reports/excel', [ReportController::class, 'exportExcel']);
 });
 
-// MEMBER ROUTES
+// --- MEMBER & UMUM (AUTH) ROUTES ---
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    
+    // 👇 PERBAIKAN RUTE PROFIL 👇
+    // 1. URL /profile membuka fungsi show (Halaman utama profil)
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    
+    // 2. URL /profile/edit membuka fungsi edit (Halaman form edit profil)
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    
+    // Route update & destroy tetap sama, menggunakan path /profile
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // 👆 SELESAI PERBAIKAN 👆
 
     // Member - Daftar Buku
     Route::get('/daftar-buku', [BukuController::class, 'memberIndex'])->name('bukus.member');

@@ -8,41 +8,82 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): Response
+    public function show(Request $request): Response
     {
+        $user = $request->user();
+
         return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
+            'foto_url' => $user->foto ? asset('storage/' . $user->foto) : null,
+            'statistik' => [
+                'bukuDipinjam' => 12,
+                'favorit' => 8,
+                'sedangDibaca' => 3,
+            ]
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function edit(Request $request): Response
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
+        return Inertia::render('Profile/Editprofile/Edit', [
+            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
+            'status' => session('status'),
+            'foto_url' => $user->foto ? asset('storage/' . $user->foto) : null, 
+        ]);
     }
 
-    /**
-     * Delete the user's account.
-     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        // Validasi untuk foto dan sinyal hapus
+        $request->validate([
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'hapus_foto' => ['nullable', 'string', 'in:true,false,1,0'], 
+        ]);
+
+        // Jika frontend mengirimkan sinyal untuk menghapus foto
+        if ($request->boolean('hapus_foto')) {
+            if ($user->foto) {
+                Storage::disk('public')->delete($user->foto); 
+            }
+            $user->foto = null; 
+        }
+
+        // Jika user mengunggah foto baru
+        if ($request->hasFile('foto')) {
+            if ($user->foto) {
+                Storage::disk('public')->delete($user->foto);
+            }
+            $path = $request->file('foto')->store('fotos', 'public');
+            $user->foto = $path;
+        }
+
+        // FUNGSI BAWAAN: Mengambil Nama dan Email
+        $user->fill($request->validated());
+
+        // 👇 INI YANG DITAMBAHKAN AGAR DATANYA MASUK DB 👇
+        $user->no_telp = $request->no_telp;
+        $user->no_identitas = $request->no_identitas;
+
+        // Mengecek apakah email berubah untuk verifikasi ulang
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        // Simpan ke Database MySQL
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([
@@ -52,6 +93,10 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
+
+        if ($user->foto) {
+            Storage::disk('public')->delete($user->foto);
+        }
 
         $user->delete();
 

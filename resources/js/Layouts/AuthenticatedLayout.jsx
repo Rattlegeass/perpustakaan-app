@@ -147,18 +147,38 @@ export default function AuthenticatedLayout({ header, children }) {
                                             <p className="text-sm font-bold text-slate-700">{user.name}</p>
                                             <p className="text-xs text-slate-500 capitalize">{user.role}</p>
                                         </div>
-                                        <div className="w-10 h-10 rounded-full border-2 border-blue-600/20 p-0.5 bg-[#0B3A60] flex items-center justify-center text-white font-bold text-sm">
-                                            {user.name.charAt(0).toUpperCase()}
+                                        
+                                        {/* 👇 SEKARANG MENGGUNAKAN FOTO JIKA ADA, JIKA TIDAK KEMBALI KE INISIAL */}
+                                        <div className="w-10 h-10 rounded-full border-2 border-blue-600/20 bg-[#0B3A60] flex items-center justify-center text-white font-bold text-sm overflow-hidden shadow-sm">
+                                            {user.avatar ? (
+                                                <img 
+                                                    src={user.avatar} 
+                                                    alt={user.name} 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                user.name.charAt(0).toUpperCase()
+                                            )}
                                         </div>
                                     </button>
                                 </Dropdown.Trigger>
 
                                 <Dropdown.Content align="right" className="mt-2">
-                                    <div className="px-4 py-3 border-b border-slate-100">
-                                        <p className="text-sm font-semibold text-slate-700">{user.name}</p>
-                                        <p className="text-xs text-slate-500">{user.email}</p>
+                                    <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-3">
+                                        {/* 👇 Foto kecil di dalam menu dropdown */}
+                                        <div className="w-8 h-8 rounded-full bg-[#0B3A60] flex items-center justify-center text-white font-bold text-xs overflow-hidden shrink-0">
+                                            {user.avatar ? (
+                                                <img src={user.avatar} alt="" className="w-full h-full object-cover" />
+                                            ) : (
+                                                user.name.charAt(0).toUpperCase()
+                                            )}
+                                        </div>
+                                        <div className="overflow-hidden">
+                                            <p className="text-sm font-semibold text-slate-700 truncate">{user.name}</p>
+                                            <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                                        </div>
                                     </div>
-                                    <Dropdown.Link href={route('profile.edit')} className="px-4 py-2 text-sm hover:bg-slate-50">
+                                    <Dropdown.Link href={route('profile.show')} className="px-4 py-2 text-sm hover:bg-slate-50">
                                         ⚙️ Pengaturan Profile
                                     </Dropdown.Link>
                                     <Dropdown.Link
