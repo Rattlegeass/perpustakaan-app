@@ -2,7 +2,7 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 // 👇 Import komponen DeleteUserForm buatan kita 👇
-import DeleteUserForm from './Partials/DeleteUserForm'; 
+import DeleteUserForm from './Partials/DeleteUserForm';
 
 export default function Show({ auth }) {
     const getInitials = (name) => {
@@ -13,6 +13,14 @@ export default function Show({ auth }) {
         }
         return name.substring(0, 2).toUpperCase();
     };
+
+    const getFotoUrl = (foto) => {
+        if (!foto) return null;
+        if (foto.startsWith('/storage/') || foto.startsWith('http')) return foto;
+        return `/storage/${foto}`;
+    };
+
+    const fotoUrl = getFotoUrl(auth.user.foto);
 
     return (
         <AuthenticatedLayout
@@ -26,7 +34,7 @@ export default function Show({ auth }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-5xl sm:px-6 lg:px-8">
-                    
+
                     <div className="flex flex-col gap-6">
                         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
                             <div className="mb-6 flex items-center justify-between">
@@ -58,8 +66,8 @@ export default function Show({ auth }) {
                             {/* FOTO DAN NAMA SINGKAT */}
                             <div className="flex flex-col items-center sm:flex-row sm:items-center sm:gap-6">
                                 <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-blue-50 shadow-md transition-transform duration-200 hover:scale-105">
-                                    {auth.user.avatar ? (
-                                        <img src={auth.user.avatar} alt="Avatar" className="h-full w-full object-cover" />
+                                    {fotoUrl ? (
+                                        <img src={fotoUrl} alt="Avatar" className="h-full w-full object-cover" />
                                     ) : (
                                         <span className="text-3xl font-bold text-blue-600">
                                             {getInitials(auth.user.name)}

@@ -17,9 +17,11 @@ class ProfileController extends Controller
     public function show(Request $request): Response
     {
         $user = $request->user();
+        
+        $fotoUrl = $user->foto ? (str_starts_with($user->foto, 'http') ? $user->foto : (str_starts_with($user->foto, '/storage/') ? asset($user->foto) : asset('storage/' . $user->foto))) : null;
 
         return Inertia::render('Profile/Edit', [
-            'foto_url' => $user->foto ? asset('storage/' . $user->foto) : null,
+            'foto_url' => $fotoUrl,
             'statistik' => [
                 'bukuDipinjam' => 12,
                 'favorit' => 8,
@@ -32,10 +34,12 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
+        $fotoUrl = $user->foto ? (str_starts_with($user->foto, 'http') ? $user->foto : (str_starts_with($user->foto, '/storage/') ? asset($user->foto) : asset('storage/' . $user->foto))) : null;
+
         return Inertia::render('Profile/Editprofile/Edit', [
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
-            'foto_url' => $user->foto ? asset('storage/' . $user->foto) : null, 
+            'foto_url' => $fotoUrl, 
         ]);
     }
 
@@ -52,7 +56,8 @@ class ProfileController extends Controller
         // Jika frontend mengirimkan sinyal untuk menghapus foto
         if ($request->boolean('hapus_foto')) {
             if ($user->foto) {
-                Storage::disk('public')->delete($user->foto); 
+                $oldPath = str_replace('/storage/', '', $user->foto);
+                Storage::disk('public')->delete($oldPath); 
             }
             $user->foto = null; 
         }
@@ -60,10 +65,11 @@ class ProfileController extends Controller
         // Jika user mengunggah foto baru
         if ($request->hasFile('foto')) {
             if ($user->foto) {
-                Storage::disk('public')->delete($user->foto);
+                $oldPath = str_replace('/storage/', '', $user->foto);
+                Storage::disk('public')->delete($oldPath);
             }
             $path = $request->file('foto')->store('fotos', 'public');
-            $user->foto = $path;
+            $user->foto = '/storage/' . $path;
         }
 
         // FUNGSI BAWAAN: Mengambil Nama dan Email
@@ -95,7 +101,8 @@ class ProfileController extends Controller
         Auth::logout();
 
         if ($user->foto) {
-            Storage::disk('public')->delete($user->foto);
+            $oldPath = str_replace('/storage/', '', $user->foto);
+            Storage::disk('public')->delete($oldPath);
         }
 
         $user->delete();
