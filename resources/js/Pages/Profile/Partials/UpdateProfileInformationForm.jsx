@@ -8,10 +8,19 @@ import { useState, useRef, useEffect } from 'react';
 export default function UpdateProfileInformation({ mustVerifyEmail, status, foto_url, className = '' }) {
     const user = usePage().props.auth.user;
     const fileInputRef = useRef(null); 
-    const [preview, setPreview] = useState(foto_url);
+
+    const getFotoUrl = (url) => {
+        if (!url) return null;
+        if (url.startsWith('blob:') || url.startsWith('http:') || url.startsWith('https:') || url.startsWith('/storage/')) {
+            return url;
+        }
+        return `/storage/${url}`;
+    };
+
+    const [preview, setPreview] = useState(getFotoUrl(foto_url));
 
     useEffect(() => {
-        setPreview(foto_url);
+        setPreview(getFotoUrl(foto_url));
     }, [foto_url]);
 
     const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
