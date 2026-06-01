@@ -51,8 +51,10 @@ class ReportExport implements FromCollection, WithHeadings, WithMapping, ShouldA
             $denda = 0;
             $details = is_iterable($item->detailPeminjaman) ? $item->detailPeminjaman : [$item->detailPeminjaman];
             foreach ($details as $det) {
-                if ($det && $det->denda) {
-                    $denda += $det->denda->jumlah_denda;
+                if ($det && $det->dendas) {
+                    foreach ($det->dendas as $dendaItem) {
+                        $denda += $dendaItem->jumlah_denda;
+                    }
                 }
             }
 

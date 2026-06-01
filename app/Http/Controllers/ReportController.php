@@ -24,7 +24,7 @@ class ReportController extends Controller
 
         // 2. Query Utama (untuk tabel) dengan pencarian nama
         // Menggunakan tgl_peminjaman sesuai database
-        $query = Peminjaman::with(['user', 'detailPeminjaman.buku', 'detailPeminjaman.denda'])
+        $query = Peminjaman::with(['user', 'detailPeminjaman.buku', 'detailPeminjaman.dendas'])
             ->whereBetween('tgl_peminjaman', [$startDate, $endDate]);
 
         if ($search) {
@@ -35,7 +35,7 @@ class ReportController extends Controller
         $peminjamans = $query->latest('tgl_peminjaman')->get();
 
         // 3. Ambil Semua Data di Rentang Tanggal untuk Analisis
-        $allStats = Peminjaman::with(['detailPeminjaman.buku', 'detailPeminjaman.denda'])
+        $allStats = Peminjaman::with(['detailPeminjaman.buku', 'detailPeminjaman.dendas'])
             ->whereBetween('tgl_peminjaman', [$startDate, $endDate])
             ->get();
 
@@ -63,8 +63,10 @@ class ReportController extends Controller
                 if ($detail) {
                     $totalBukuDipinjam++;
                     
-                    if ($detail->denda) {
-                        $totalDenda += $detail->denda->jumlah_denda;
+                    if ($detail->dendas) {
+                        foreach ($detail->dendas as $dendaItem) {
+                            $totalDenda += $dendaItem->jumlah_denda;
+                        }
                     }
 
                     // Kumpulkan ranking buku
@@ -117,7 +119,7 @@ class ReportController extends Controller
 
         // 1. Data Transaksi, Peminjaman, atau Aktif
         if (in_array($type, ['semua', 'peminjaman', 'aktif'])) {
-            $query = Peminjaman::with(['user', 'detailPeminjaman.buku', 'detailPeminjaman.denda'])
+            $query = Peminjaman::with(['user', 'detailPeminjaman.buku', 'detailPeminjaman.dendas'])
                 ->whereBetween('tgl_peminjaman', [$start, $end]);
 
             if ($search) {
@@ -145,7 +147,7 @@ class ReportController extends Controller
         // 3. Data Anggota
         elseif ($type === 'anggota') {
             $title = 'Data Anggota Perpustakaan';
-            $data = User::all(); 
+            $data = User::where('role', 'member')->get(); 
         }
         // 4. Data Buku
         elseif ($type === 'buku') {
