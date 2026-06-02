@@ -11,6 +11,7 @@ export default function Index({ auth, peminjamans, stats, bukuPopuler, filter, l
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);
     const [exportType, setExportType] = useState('semua'); 
     const [exportFormat, setExportFormat] = useState('pdf');
+    const [statusFilter, setStatusFilter] = useState('semua');
 
     // --- DAFTAR OPSI EXPORT DENGAN ICON SVG ---
     const exportOptions = [
@@ -73,6 +74,44 @@ export default function Index({ auth, peminjamans, stats, bukuPopuler, filter, l
     const pctDikembalikan = totalStatus > 0 ? (stats.dikembalikan / totalStatus) * 100 : 0;
     const pctAktif = totalStatus > 0 ? (stats.aktif / totalStatus) * 100 : 0;
     const pctTerlambat = totalStatus > 0 ? (stats.terlambat / totalStatus) * 100 : 0;
+
+    // --- 1. OLAH SEMUA DATA BUKU ---
+    const allBookDetails = peminjamans.flatMap((transaksi) => {
+        const details = Array.isArray(transaksi.detail_peminjaman) 
+            ? transaksi.detail_peminjaman 
+            : (transaksi.detail_peminjaman ? [transaksi.detail_peminjaman] : []);
+
+        return details.map(detail => {
+            // 👇 Gemy menyesuaikan status langsung dari buku (detail)
+            // Cek database kamu, pastikan field-nya 'status' atau sesuaikan (misal: detail.status_buku)
+            const statusBuku = detail.status || transaksi.status_peminjaman; 
+            const dendaBuku = detail.denda ? parseFloat(detail.denda.jumlah_denda) : 0;
+            return { transaksi, detail, statusBuku, dendaBuku };
+        });
+    });
+
+    // --- 2. HITUNG STATISTIK REAL-TIME PER BUKU ---
+    // Sekarang angkanya dihitung langsung dari buku, bukan bawaan stats backend
+    const hitungTotalBuku = allBookDetails.length;
+    
+    // Gemy tambahkan 'dipinjam' dan 'aktif' untuk jaga-jaga format teks di databasemu
+    const hitungAktif = allBookDetails.filter(item => 
+        item.statusBuku === 'dipinjam' || item.statusBuku === 'menunggu_pengambilan' || item.statusBuku === 'aktif'
+    ).length;
+    
+    const hitungDikembalikan = allBookDetails.filter(item => item.statusBuku === 'dikembalikan').length;
+    const hitungTerlambat = allBookDetails.filter(item => item.statusBuku === 'terlambat').length;
+    const hitungTotalDenda = allBookDetails.reduce((sum, item) => sum + item.dendaBuku, 0);
+
+    // --- 3. FILTER UNTUK TABEL (SESUAI KOTAK YANG DIPENCET) ---
+    const displayedBooks = allBookDetails.filter(item => {
+        if (statusFilter === 'semua') return true;
+        if (statusFilter === 'aktif') return item.statusBuku === 'dipinjam' || item.statusBuku === 'menunggu_pengambilan' || item.statusBuku === 'aktif';
+        if (statusFilter === 'dikembalikan') return item.statusBuku === 'dikembalikan';
+        if (statusFilter === 'terlambat') return item.statusBuku === 'terlambat';
+        if (statusFilter === 'berdenda') return item.dendaBuku > 0;
+        return true;
+    });
 
     return (
         <AuthenticatedLayout
@@ -159,52 +198,67 @@ export default function Index({ auth, peminjamans, stats, bukuPopuler, filter, l
                         </div>
                     </div>
 
-                    {/* --- 5 KARTU STATISTIK --- */}
+                  {/* --- 5 KARTU STATISTIK (SEKARANG MENGHITUNG BUKU SECARA REAL-TIME) --- */}
                     <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+                        <div 
+                            onClick={() => setStatusFilter('semua')}
+                            className={`cursor-pointer p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300 bg-blue-50 border ${statusFilter === 'semua' ? 'ring-2 ring-blue-500 border-blue-500' : 'border-blue-100'}`}
+                        >
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">Total Buku</p>
-                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{stats.totalBuku}</p>
+                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{hitungTotalBuku}</p>
                             </div>
                             <div className="p-2.5 bg-blue-100 text-blue-600 rounded-lg">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                             </div>
                         </div>
 
-                        <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+                        <div 
+                            onClick={() => setStatusFilter('aktif')}
+                            className={`cursor-pointer p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300 bg-amber-50 border ${statusFilter === 'aktif' ? 'ring-2 ring-amber-500 border-amber-500' : 'border-amber-100'}`}
+                        >
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-wider text-amber-700">Aktif (Pinjam)</p>
-                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{stats.aktif}</p>
+                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{hitungAktif}</p>
                             </div>
                             <div className="p-2.5 bg-amber-100 text-amber-700 rounded-lg">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                         </div>
 
-                        <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+                        <div 
+                            onClick={() => setStatusFilter('dikembalikan')}
+                            className={`cursor-pointer p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300 bg-emerald-50 border ${statusFilter === 'dikembalikan' ? 'ring-2 ring-emerald-500 border-emerald-500' : 'border-emerald-100'}`}
+                        >
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Dikembalikan</p>
-                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{stats.dikembalikan}</p>
+                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{hitungDikembalikan}</p>
                             </div>
                             <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                             </div>
                         </div>
 
-                        <div className="bg-red-50 border border-red-100 p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+                        <div 
+                            onClick={() => setStatusFilter('terlambat')}
+                            className={`cursor-pointer p-4 rounded-xl shadow-sm flex items-center justify-between hover:-translate-y-1 hover:shadow-md transition-all duration-300 bg-red-50 border ${statusFilter === 'terlambat' ? 'ring-2 ring-red-500 border-red-500' : 'border-red-100'}`}
+                        >
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-wider text-red-700">Terlambat</p>
-                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{stats.terlambat}</p>
+                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{hitungTerlambat}</p>
                             </div>
                             <div className="p-2.5 bg-red-100 text-red-700 rounded-lg">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                             </div>
                         </div>
 
-                        <div className="bg-rose-50 border border-rose-100 p-4 rounded-xl shadow-sm flex items-center justify-between lg:col-span-1 col-span-2 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+                        <div 
+                            onClick={() => setStatusFilter('berdenda')}
+                            className={`cursor-pointer p-4 rounded-xl shadow-sm flex items-center justify-between lg:col-span-1 col-span-2 hover:-translate-y-1 hover:shadow-md transition-all duration-300 bg-rose-50 border ${statusFilter === 'berdenda' ? 'ring-2 ring-rose-500 border-rose-500' : 'border-rose-100'}`}
+                        >
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-wider text-rose-600">Total Denda</p>
-                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{formatRupiah(stats.denda)}</p>
+                                <p className="text-2xl font-extrabold text-gray-900 mt-1">{formatRupiah(hitungTotalDenda)}</p>
                             </div>
                             <div className="p-2.5 bg-rose-100 text-rose-600 rounded-lg">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -236,16 +290,18 @@ export default function Index({ auth, peminjamans, stats, bukuPopuler, filter, l
                                             <th className="px-6 py-4 text-left font-semibold text-gray-500 uppercase tracking-wider text-xs">Denda</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="bg-white divide-y divide-gray-100">
-                                        {peminjamans.length > 0 ? (
-                                            peminjamans.map((item) => {
+                                   <tbody className="bg-white divide-y divide-gray-100">
+                                        {displayedBooks.length > 0 ? (
+                                            displayedBooks.map((item, index) => {
+                                                const { transaksi, detail, statusBuku, dendaBuku } = item;
+                                                
                                                 let badgeColor = "bg-gray-50 text-gray-700 border-gray-200";
                                                 let Icon = null;
                                                 
-                                                if (item.status_peminjaman === 'dikembalikan') {
+                                                if (statusBuku === 'dikembalikan') {
                                                     badgeColor = "bg-emerald-50 text-emerald-700 border-emerald-200";
                                                     Icon = <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>;
-                                                } else if (item.status_peminjaman === 'terlambat') {
+                                                } else if (statusBuku === 'terlambat') {
                                                     badgeColor = "bg-red-50 text-red-700 border-red-200";
                                                     Icon = <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
                                                 } else {
@@ -253,29 +309,27 @@ export default function Index({ auth, peminjamans, stats, bukuPopuler, filter, l
                                                     Icon = <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
                                                 }
 
-                                                let dendaLokal = 0;
-                                                const details = Array.isArray(item.detail_peminjaman) ? item.detail_peminjaman : (item.detail_peminjaman ? [item.detail_peminjaman] : []);
-                                                details.forEach(det => {
-                                                    if(det && det.denda) dendaLokal += parseFloat(det.denda.jumlah_denda) || 0;
-                                                });
-
                                                 return (
-                                                    <tr key={item.id} className="hover:bg-gray-50/80 transition-colors">
-                                                        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                                                            {item.user ? item.user.name : 'User Dihapus'}
+                                                    <tr key={`${transaksi.id}-${detail.id || index}`} className="hover:bg-gray-50/80 transition-colors">
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <div className="font-medium text-gray-900">{transaksi.user ? transaksi.user.name : 'User Dihapus'}</div>
+                                                            <div className="text-xs text-indigo-600 mt-1 flex items-center gap-1">
+                                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                                                {detail.buku ? detail.buku.judul : 'Buku Tidak Diketahui'}
+                                                            </div>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                                                            {item.tgl_peminjaman ? new Date(item.tgl_peminjaman).toLocaleDateString('id-ID', {day: '2-digit', month: 'short', year: 'numeric'}) : '-'}
+                                                            {transaksi.tgl_peminjaman ? new Date(transaksi.tgl_peminjaman).toLocaleDateString('id-ID', {day: '2-digit', month: 'short', year: 'numeric'}) : '-'}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <span className={`px-2.5 py-1 inline-flex items-center text-xs font-bold rounded-full border ${badgeColor}`}>
                                                                 {Icon}
-                                                                {item.status_peminjaman ? item.status_peminjaman.replace(/_/g, ' ').toUpperCase() : '-'}
+                                                                {statusBuku ? statusBuku.replace(/_/g, ' ').toUpperCase() : '-'}
                                                             </span>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap font-bold">
-                                                            {dendaLokal > 0 ? (
-                                                                <span className="text-red-600">{formatRupiah(dendaLokal)}</span>
+                                                            {dendaBuku > 0 ? (
+                                                                <span className="text-red-600">{formatRupiah(dendaBuku)}</span>
                                                             ) : (
                                                                 <span className="text-gray-300">-</span>
                                                             )}
@@ -290,8 +344,8 @@ export default function Index({ auth, peminjamans, stats, bukuPopuler, filter, l
                                                         <div className="bg-gray-50 p-4 rounded-full mb-3">
                                                             <svg className="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                                                         </div>
-                                                        <h4 className="text-gray-900 font-semibold text-lg">Belum Ada Data Laporan</h4>
-                                                        <p className="text-gray-400 text-sm mt-1 max-w-sm">Tidak ditemukan aktivitas peminjaman atau pengembalian pada rentang tanggal yang kamu pilih.</p>
+                                                        <h4 className="text-gray-900 font-semibold text-lg">Data Kosong</h4>
+                                                        <p className="text-gray-400 text-sm mt-1 max-w-sm">Tidak ada buku di kategori ini pada rentang waktu terpilih.</p>
                                                     </div>
                                                 </td>
                                             </tr>
