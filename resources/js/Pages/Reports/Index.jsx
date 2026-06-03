@@ -85,7 +85,12 @@ export default function Index({ auth, peminjamans, stats, bukuPopuler, filter, l
             // 👇 Gemy menyesuaikan status langsung dari buku (detail)
             // Cek database kamu, pastikan field-nya 'status' atau sesuaikan (misal: detail.status_buku)
             const statusBuku = detail.status || transaksi.status_peminjaman; 
-            const dendaBuku = detail.denda ? parseFloat(detail.denda.jumlah_denda) : 0;
+            
+            let dendaBuku = 0;
+            if (detail.dendas && Array.isArray(detail.dendas)) {
+                dendaBuku = detail.dendas.reduce((sum, denda) => sum + parseFloat(denda.jumlah_denda || 0), 0);
+            }
+            
             return { transaksi, detail, statusBuku, dendaBuku };
         });
     });

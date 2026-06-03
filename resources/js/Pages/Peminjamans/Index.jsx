@@ -103,12 +103,12 @@ export default function Index({ peminjamans, filters }) {
                         <h2 className="text-2xl font-bold text-[#0B3A60]">Daftar Peminjaman</h2>
                         <p className="text-slate-500 text-sm mt-1">Total: {peminjamans.total} peminjaman</p>
                     </div>
-                    <a
+                    {/* <a
                         href="/peminjamans/create"
                         className="px-6 py-2.5 bg-[#0B3A60] text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-md"
                     >
                         + Buat Peminjaman Baru
-                    </a>
+                    </a> */}
                 </div>
 
                 {/* Search Section */}

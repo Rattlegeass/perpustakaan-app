@@ -25,12 +25,6 @@ export default function AuthenticatedLayout({ header, children }) {
             return [
                 ...baseMenus,
                 {
-                    title: 'Manajemen Buku',
-                    icon: '📚',
-                    href: route('bukus.index'),
-                    active: route().current('bukus.*'),
-                },
-                {
                     title: 'Manajemen Peminjaman',
                     icon: '📋',
                     href: route('peminjamans.index'),
@@ -47,6 +41,12 @@ export default function AuthenticatedLayout({ header, children }) {
                     icon: '📈',
                     href: route('reports.index'), 
                     active: route().current('reports.index'),
+                },
+                {
+                    title: 'Manajemen Buku',
+                    icon: '📚',
+                    href: route('bukus.index'),
+                    active: route().current('bukus.*'),
                 },
                 {
                     title: 'Manajemen Member',
