@@ -152,7 +152,7 @@ export default function Welcome({ auth, koleksiBuku = [] }) {
     
     return (
         <>
-            <Head title="PusGitHub" />
+            <Head title="Pustaka Digital" />
             <div className="min-h-screen bg-[#F4F7FA] text-slate-700 font-sans antialiased selection:bg-yellow-400 selection:text-slate-900">
                 
                 {/* NAVBAR */}
