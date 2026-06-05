@@ -22,14 +22,15 @@ ChartJS.register(
 );
 
 export default function Dashboard({ role, adminData, memberData }) {
+    const isAdminOrPetugas = role === 'admin' || role === 'petugas';
     return (
         <AuthenticatedLayout
-            header={`📊 Dashboard ${role === 'admin' ? 'Librarian' : 'Member'}`}
+            header={`📊 Dashboard ${isAdminOrPetugas ? 'Librarian' : 'Member'}`}
         >
             <Head title="Dashboard" />
 
-            {role === 'admin' ? (
-                <AdminDashboard data={adminData} />
+            {isAdminOrPetugas ? (
+                <AdminDashboard data={adminData} role={role} />
             ) : (
                 <MemberDashboard data={memberData} />
             )}
@@ -40,7 +41,7 @@ export default function Dashboard({ role, adminData, memberData }) {
 // -------------------------------------------------------------
 // ADMIN DASHBOARD COMPONENT
 // -------------------------------------------------------------
-function AdminDashboard({ data }) {
+function AdminDashboard({ data, role }) {
     const chartData = {
         labels: data.monthlyFines.map(item => item.month_name),
         datasets: [
@@ -92,8 +93,8 @@ function AdminDashboard({ data }) {
                     </svg>
                 </div>
                 <div className="relative z-10 space-y-2">
-                    <span className="bg-yellow-400/20 text-yellow-300 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Librarian Mode</span>
-                    <h1 className="text-3xl font-black">Selamat Datang Kembali, Admin!</h1>
+                    <span className="bg-yellow-400/20 text-yellow-300 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider">{role === 'admin' ? 'Librarian Mode' : 'Staff Mode'}</span>
+                    <h1 className="text-3xl font-black">Selamat Datang Kembali, {role === 'admin' ? 'Admin' : 'Petugas'}!</h1>
                     <p className="opacity-90 max-w-xl text-sm">Semua data perpustakaan, aktivitas peminjaman anggota, dan tagihan denda terangkum di sini secara real-time.</p>
                 </div>
             </div>

@@ -35,6 +35,15 @@ class DatabaseSeeder extends Seeder
             'no_identitas' => '1234567890',
         ]);
 
+        User::factory()->create([
+            'name' => 'petugas',
+            'email' => 'petugas@gmail.com',
+            'password' => bcrypt('password'),
+            'no_telp' => '081234567891',
+            'no_identitas' => '1234567891',
+            'role' => 'petugas',
+        ]);
+
         Buku::factory()->create([
             'judul' => 'Bulan',
             'penulis' => 'Tere Liye',

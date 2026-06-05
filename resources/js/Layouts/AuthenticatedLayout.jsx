@@ -21,8 +21,8 @@ export default function AuthenticatedLayout({ header, children }) {
             },
         ];
 
-        if (user.role === 'admin') {
-            return [
+        if (user.role === 'admin' || user.role === 'petugas') {
+            const adminMenus = [
                 ...baseMenus,
                 {
                     title: 'Manajemen Peminjaman',
@@ -39,7 +39,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 {
                     title: 'Report',
                     icon: '📈',
-                    href: route('reports.index'), 
+                    href: route('reports.index'),
                     active: route().current('reports.index'),
                 },
                 {
@@ -48,13 +48,20 @@ export default function AuthenticatedLayout({ header, children }) {
                     href: route('bukus.index'),
                     active: route().current('bukus.*'),
                 },
-                {
-                    title: 'Manajemen Member',
-                    icon: '👥',
-                    href: route('members.index'),
-                    active: route().current('members.*'),
-                },
             ];
+
+            if (user.role === 'admin') {
+                adminMenus.push(
+                    {
+                        title: 'Manajemen Member',
+                        icon: '👥',
+                        href: route('members.index'),
+                        active: route().current('members.*'),
+                    }
+                );
+            }
+
+            return adminMenus;
         } else {
             return [
                 ...baseMenus,
@@ -185,7 +192,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                             <p className="text-xs text-slate-500 truncate">{user.email}</p>
                                         </div>
                                     </div>
-                                    {user.role !== 'admin' &&
+                                    {user.role !== 'admin' && user.role !== 'petugas' &&
                                         <Dropdown.Link href={route('profile.show')} className="px-4 py-2 text-sm hover:bg-slate-50">
                                             ⚙️ Pengaturan Profile
                                         </Dropdown.Link>
@@ -220,7 +227,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 {/* SIDEBAR - Desktop */}
                 <aside className="hidden lg:flex lg:w-64 bg-white border-r border-slate-200 flex-col">
                     <nav className="flex-1 p-6 space-y-2">
-                       {menuItems.map((menu) => (
+                        {menuItems.map((menu) => (
                             <Link
                                 key={menu.title}
                                 href={menu.href}
@@ -255,20 +262,20 @@ export default function AuthenticatedLayout({ header, children }) {
                         {/* Sidebar Panel */}
                         <div className="absolute left-0 top-20 bottom-0 w-64 bg-white shadow-xl border-r border-slate-200 overflow-y-auto">
                             <nav className="p-6 space-y-2">
-                               {menuItems.map((menu) => (
-                                <Link
-                                    key={menu.title}
-                                    href={menu.href}
-                                    onClick={() => setSidebarOpen(false)}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
-                                        ? 'bg-blue-100 text-[#0B3A60] font-bold'
-                                        : 'text-slate-600 hover:bg-slate-50'
-                                        }`}
-                                >
-                                    <span className="text-xl">{menu.icon}</span>
-                                    <span className="text-sm font-semibold">{menu.title}</span>
-                                </Link>
-                            ))}
+                                {menuItems.map((menu) => (
+                                    <Link
+                                        key={menu.title}
+                                        href={menu.href}
+                                        onClick={() => setSidebarOpen(false)}
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${menu.active
+                                            ? 'bg-blue-100 text-[#0B3A60] font-bold'
+                                            : 'text-slate-600 hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        <span className="text-xl">{menu.icon}</span>
+                                        <span className="text-sm font-semibold">{menu.title}</span>
+                                    </Link>
+                                ))}
                             </nav>
                         </div>
                     </div>

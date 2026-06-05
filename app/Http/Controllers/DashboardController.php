@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $role = $user->role;
 
-        if ($role === 'admin') {
+        if ($role === 'admin' || $role === 'petugas') {
             $totalBooks = Buku::count();
             $totalBorrowings = Peminjaman::count();
             
@@ -72,7 +72,7 @@ class DashboardController extends Controller
                 ->get();
 
             return Inertia::render('Dashboard', [
-                'role' => 'admin',
+                'role' => $role,
                 'adminData' => [
                     'totalBooks' => $totalBooks,
                     'totalBorrowings' => $totalBorrowings,

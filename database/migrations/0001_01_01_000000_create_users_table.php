@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('no_telp')->nullable();
             $table->string('no_identitas')->nullable();
             $table->string('foto')->nullable();
-            $table->enum('role', ['admin','member'])->default('member');
+            $table->enum('role', ['admin', 'petugas', 'member'])->default('member');
             $table->rememberToken();
             $table->timestamps();
         });

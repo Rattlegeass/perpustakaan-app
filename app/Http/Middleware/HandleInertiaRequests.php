@@ -33,7 +33,7 @@ class HandleInertiaRequests extends Middleware
         $notifications = [];
 
         if ($user) {
-            if ($user->role === 'admin') {
+            if ($user->role === 'admin' || $user->role === 'petugas') {
                 // Fetch admin alerts
                 // 1. Pending approvals
                 $pendingApprovals = \App\Models\Peminjaman::where('status_peminjaman', 'menunggu_persetujuan')->count();
