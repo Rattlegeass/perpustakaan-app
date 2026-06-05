@@ -92,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/peminjamans-saya', [PeminjamanController::class, 'memberIndex'])->name('peminjamans.member');
     Route::post('/peminjamans-buat', [PeminjamanController::class, 'memberStore'])->name('peminjamans.member.store');
     Route::delete('/peminjamans-batal/{peminjaman}', [PeminjamanController::class, 'memberCancel'])->name('peminjamans.member.cancel');
+    Route::patch('/peminjamans-ubah/{peminjaman}', [PeminjamanController::class, 'memberUpdate'])->name('peminjamans.member.update');
 
     // Member - Struk Download (with authorization check)
     Route::get('/member-struks/{struk}/download', [StrukController::class, 'memberDownload'])->name('struks.member.download');

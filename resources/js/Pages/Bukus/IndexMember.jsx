@@ -2,26 +2,34 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function IndexMember({ bukus, filters, categories }) {
+export default function IndexMember({ bukus, filters, categories, borrowedBookIds = [] }) {
     const [selectedBukus, setSelectedBukus] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [selectionError, setSelectionError] = useState(null);
     
     // STATE BARU: Untuk menyimpan data buku yang sedang diklik (ditampilkan di Pop-up)
     const [detailBuku, setDetailBuku] = useState(null);
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, clearErrors } = useForm({
         buku_ids: [],
     });
 
     const handleToggleSelect = (buku) => {
+        setSelectionError(null);
         if (selectedBukus.some((b) => b.id === buku.id)) {
             setSelectedBukus(selectedBukus.filter((b) => b.id !== buku.id));
         } else {
+            if (selectedBukus.length >= 5) {
+                setSelectionError('Maksimal 5 buku dalam sekali peminjaman.');
+                setTimeout(() => setSelectionError(null), 4000);
+                return;
+            }
             setSelectedBukus([...selectedBukus, buku]);
         }
     };
 
     const handleCheckout = () => {
+        clearErrors();
         setData('buku_ids', selectedBukus.map(b => b.id));
         setShowModal(true);
     };
@@ -80,6 +88,12 @@ export default function IndexMember({ bukus, filters, categories }) {
                     ))}
                 </div>
 
+                {selectionError && (
+                    <div className="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-lg text-sm font-semibold flex items-center gap-2 animate-in fade-in duration-200">
+                        <span>⚠️</span> {selectionError}
+                    </div>
+                )}
+
                 {/* Book Grid */}
                 {bukus.data && bukus.data.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -123,24 +137,33 @@ export default function IndexMember({ bukus, filters, categories }) {
                                     </div>
 
                                     {/* Selection Button */}
-                                    <button
-                                        onClick={() => handleToggleSelect(buku)}
-                                        disabled={buku.stok <= 0 || processing}
-                                        className={`w-full py-2.5 rounded-lg font-bold text-sm transition-all ${
-                                            buku.stok <= 0
-                                                ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                                    {borrowedBookIds.includes(buku.id) ? (
+                                        <button
+                                            disabled
+                                            className="w-full py-2.5 rounded-lg font-bold text-sm bg-amber-100 text-amber-800 border border-amber-200 cursor-not-allowed"
+                                        >
+                                            ⏳ Sedang Dipinjam/Diajukan
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleToggleSelect(buku)}
+                                            disabled={buku.stok <= 0 || processing}
+                                            className={`w-full py-2.5 rounded-lg font-bold text-sm transition-all ${
+                                                buku.stok <= 0
+                                                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                                                    : selectedBukus.some(b => b.id === buku.id)
+                                                    ? 'bg-green-600 text-white hover:bg-green-700 shadow-md transform scale-[1.02]'
+                                                    : 'bg-[#0B3A60] text-white hover:bg-blue-700'
+                                            }`}
+                                        >
+                                            {buku.stok <= 0
+                                                ? 'Tidak Tersedia'
                                                 : selectedBukus.some(b => b.id === buku.id)
-                                                ? 'bg-green-600 text-white hover:bg-green-700 shadow-md transform scale-[1.02]'
-                                                : 'bg-[#0B3A60] text-white hover:bg-blue-700'
-                                        }`}
-                                    >
-                                        {buku.stok <= 0
-                                            ? 'Tidak Tersedia'
-                                            : selectedBukus.some(b => b.id === buku.id)
-                                            ? '✓ Terpilih'
-                                            : '📕 Pilih Buku'
-                                        }
-                                    </button>
+                                                ? '✓ Terpilih'
+                                                : '📕 Pilih Buku'
+                                            }
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -198,6 +221,11 @@ export default function IndexMember({ bukus, filters, categories }) {
                             <p className="text-blue-100 text-sm mt-1">{selectedBukus.length} Buku Terpilih</p>
                         </div>
                         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                            {errors.buku_ids && (
+                                <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-xs font-bold animate-in fade-in duration-200">
+                                    ⚠️ {errors.buku_ids}
+                                </div>
+                            )}
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-h-60 overflow-y-auto">
                                 <p className="text-sm font-semibold text-slate-700 mb-2">📋 Daftar Buku yang Dipinjam</p>
                                 <ul className="space-y-2 text-sm text-slate-800">
@@ -217,7 +245,7 @@ export default function IndexMember({ bukus, filters, categories }) {
                                 </div>
                             </div>
                             <div className="flex gap-3 pt-2">
-                                <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2.5 bg-slate-200 text-slate-700 rounded-lg font-bold hover:bg-slate-300 transition-colors">Batal</button>
+                                <button type="button" onClick={() => { setShowModal(false); clearErrors(); }} className="flex-1 px-4 py-2.5 bg-slate-200 text-slate-700 rounded-lg font-bold hover:bg-slate-300 transition-colors">Batal</button>
                                 <button type="submit" disabled={processing} className="flex-1 px-4 py-2.5 bg-[#0B3A60] text-white rounded-lg font-bold hover:bg-blue-700 transition-colors disabled:opacity-50">
                                     {processing ? '⏳ Mengirim...' : '📤 Kirim Permintaan'}
                                 </button>
@@ -313,34 +341,43 @@ export default function IndexMember({ bukus, filters, categories }) {
 
                             {/* Tombol Aksi (Sticky di bawah) */}
                             <div className="pt-6 mt-auto border-t border-slate-100 bg-white">
-                                <button
-                                    onClick={() => {
-                                        handleToggleSelect(detailBuku);
-                                        setDetailBuku(null); // Menutup otomatis
-                                    }}
-                                    disabled={detailBuku.stok <= 0 || processing}
-                                    className={`w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
-                                        detailBuku.stok <= 0
-                                            ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                                            : selectedBukus.some(b => b.id === detailBuku.id)
-                                            ? 'bg-red-50 text-red-600 hover:bg-red-100 ring-1 ring-red-200'
-                                            : 'bg-[#0B3A60] text-white hover:bg-[#082a45] shadow-lg hover:shadow-xl hover:-translate-y-0.5'
-                                    }`}
-                                >
-                                    {detailBuku.stok <= 0 ? (
-                                        <><span>🚫</span> Tidak Tersedia Saat Ini</>
-                                    ) : selectedBukus.some(b => b.id === detailBuku.id) ? (
-                                        <>
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                            Batal Pilih Buku Ini
-                                        </>
-                                    ) : (
-                                        <>
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
-                                            Tambahkan ke Keranjang Pinjam
-                                        </>
-                                    )}
-                                </button>
+                                {borrowedBookIds.includes(detailBuku.id) ? (
+                                    <button
+                                        disabled
+                                        className="w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 bg-amber-100 text-amber-800 border border-amber-200 cursor-not-allowed"
+                                    >
+                                        ⏳ Sedang Dipinjam/Diajukan
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => {
+                                            handleToggleSelect(detailBuku);
+                                            setDetailBuku(null); // Menutup otomatis
+                                        }}
+                                        disabled={detailBuku.stok <= 0 || processing}
+                                        className={`w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
+                                            detailBuku.stok <= 0
+                                                ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                                                : selectedBukus.some(b => b.id === detailBuku.id)
+                                                ? 'bg-red-50 text-red-600 hover:bg-red-100 ring-1 ring-red-200'
+                                                : 'bg-[#0B3A60] text-white hover:bg-[#082a45] shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                                        }`}
+                                    >
+                                        {detailBuku.stok <= 0 ? (
+                                            <><span>🚫</span> Tidak Tersedia Saat Ini</>
+                                        ) : selectedBukus.some(b => b.id === detailBuku.id) ? (
+                                            <>
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                Batal Pilih Buku Ini
+                                            </>
+                                        ) : (
+                                            <>
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
+                                                Tambahkan ke Keranjang Pinjam
+                                            </>
+                                        )}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

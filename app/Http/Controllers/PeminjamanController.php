@@ -443,9 +443,18 @@ class PeminjamanController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $allBukus = Buku::where('stok', '>', 0)->get();
+
+        $borrowedBookIds = DetailPeminjaman::whereHas('peminjaman', function ($q) {
+            $q->where('user_id', Auth::id())
+              ->whereIn('status_peminjaman', ['menunggu_persetujuan', 'menunggu_pengambilan', 'dipinjam']);
+        })->pluck('buku_id')->toArray();
+
         return Inertia::render('Peminjamans/IndexMember', [
             'peminjamans' => $peminjamans,
-            'filters' => $request->only('search')
+            'filters' => $request->only('search'),
+            'allBukus' => $allBukus,
+            'borrowedBookIds' => $borrowedBookIds
         ]);
     }
 
@@ -455,6 +464,22 @@ class PeminjamanController extends Controller
             'buku_ids' => 'required|array|min:1',
             'buku_ids.*' => 'exists:bukus,id',
         ]);
+
+        if (count($request->buku_ids) > 5) {
+            return back()->withErrors(['buku_ids' => 'Maksimal 5 buku dalam sekali peminjaman.']);
+        }
+
+        $borrowedBookIds = DetailPeminjaman::whereHas('peminjaman', function ($q) {
+            $q->where('user_id', Auth::id())
+              ->whereIn('status_peminjaman', ['menunggu_persetujuan', 'menunggu_pengambilan', 'dipinjam']);
+        })->pluck('buku_id')->toArray();
+
+        foreach ($request->buku_ids as $bukuId) {
+            if (in_array($bukuId, $borrowedBookIds)) {
+                $buku = Buku::find($bukuId);
+                return back()->withErrors(['buku_ids' => 'Buku "' . ($buku ? $buku->judul : 'ini') . '" sudah Anda pinjam atau ajukan sebelumnya.']);
+            }
+        }
 
         // Check stok for all books
         $judulBukus = [];
@@ -518,6 +543,76 @@ class PeminjamanController extends Controller
         $peminjaman->delete();
 
         return redirect('/peminjamans-saya')->with('success', 'Peminjaman berhasil dibatalkan');
+    }
+
+    public function memberUpdate(Request $request, string $id)
+    {
+        $request->validate([
+            'buku_ids' => 'required|array|min:1',
+            'buku_ids.*' => 'exists:bukus,id',
+        ]);
+
+        if (count($request->buku_ids) > 5) {
+            return back()->withErrors(['buku_ids' => 'Maksimal 5 buku dalam sekali peminjaman.']);
+        }
+
+        $peminjaman = Peminjaman::with('detailPeminjaman')->find($id);
+        $userId = Auth::id();
+
+        if (!$peminjaman || $peminjaman->user_id !== $userId) {
+            return back()->withErrors('Peminjaman tidak ditemukan');
+        }
+
+        if ($peminjaman->status_peminjaman !== 'menunggu_persetujuan') {
+            return back()->withErrors('Hanya peminjaman dengan status menunggu persetujuan yang dapat diubah.');
+        }
+
+        // Validasi agar tidak meminjam buku yang sudah aktif dipinjam di transaksi lain
+        $borrowedBookIds = DetailPeminjaman::whereHas('peminjaman', function ($q) use ($id) {
+            $q->where('user_id', Auth::id())
+              ->where('id', '!=', $id)
+              ->whereIn('status_peminjaman', ['menunggu_persetujuan', 'menunggu_pengambilan', 'dipinjam']);
+        })->pluck('buku_id')->toArray();
+
+        foreach ($request->buku_ids as $bukuId) {
+            if (in_array($bukuId, $borrowedBookIds)) {
+                $buku = Buku::find($bukuId);
+                return back()->withErrors(['buku_ids' => 'Buku "' . ($buku ? $buku->judul : 'ini') . '" sudah Anda pinjam atau ajukan di transaksi lain.']);
+            }
+        }
+
+        // Validasi ketersediaan stok untuk semua buku baru
+        $judulBukus = [];
+        foreach ($request->buku_ids as $bukuId) {
+            $buku = Buku::find($bukuId);
+            if ($buku->stok <= 0) {
+                return back()->withErrors(['buku_ids' => 'Stok buku "' . $buku->judul . '" tidak tersedia']);
+            }
+            $judulBukus[] = $buku->judul;
+        }
+
+        // Hapus detail peminjaman lama
+        $peminjaman->detailPeminjaman()->delete();
+
+        // Buat detail peminjaman baru
+        foreach ($request->buku_ids as $bukuId) {
+            DetailPeminjaman::create([
+                'peminjaman_id' => $peminjaman->id,
+                'buku_id' => $bukuId,
+                'status_buku' => 'dipinjam',
+            ]);
+        }
+
+        $bukuNames = implode(', ', $judulBukus);
+
+        return redirect('/peminjamans-saya')->with([
+            'success' => 'Peminjaman berhasil diperbarui!',
+            'notification' => [
+                'type' => 'success',
+                'title' => '📝 Peminjaman Diperbarui',
+                'message' => 'Detail peminjaman buku Anda berhasil diperbarui menjadi: "' . $bukuNames . '"'
+            ]
+        ]);
     }
 
     public function memberDendas()
