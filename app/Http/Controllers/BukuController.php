@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk mengelola file gambar
+use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Auth;
 
 class BukuController extends Controller
 {
@@ -81,7 +82,8 @@ class BukuController extends Controller
     public function edit(Buku $buku)
     {
         return Inertia::render('Bukus/Edit', [
-            'buku' => $buku
+            'buku' => $buku,
+            'user' => Auth::user()
         ]);
     }
 
