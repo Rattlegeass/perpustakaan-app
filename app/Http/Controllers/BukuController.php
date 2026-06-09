@@ -19,7 +19,8 @@ class BukuController extends Controller
 
         return Inertia::render('Bukus/Index', [
             'bukus' => $bukus,
-            'filters' => $request->only('search')
+            'filters' => $request->only('search'),
+            'user' => Auth::user()
         ]);
     }
 
@@ -75,7 +76,8 @@ class BukuController extends Controller
         }
 
         return Inertia::render('Bukus/Show', [
-            'buku' => $buku
+            'buku' => $buku,
+            'user' => Auth::user()
         ]);
     }
 

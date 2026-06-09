@@ -1,9 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Link, router } from '@inertiajs/react';
 
-export default function Show({ buku }) {
+export default function Show({ buku, user }) {
     const handleDelete = () => {
-        if(confirm('Apakah Anda yakin akan menghapus buku ini?')) {
+        if (confirm('Apakah Anda yakin akan menghapus buku ini?')) {
             router.delete(`/bukus/${buku.id}`);
         }
     };
@@ -16,11 +16,11 @@ export default function Show({ buku }) {
                         {/* Cover */}
                         <div>
                             {buku.cover ? (
-                                <img 
-                                    src={buku.cover} 
-                                    alt={buku.judul} 
+                                <img
+                                    src={buku.cover}
+                                    alt={buku.judul}
                                     // Tambahkan aspect-[2/3] agar ukurannya sama persis dengan yang tidak ada cover
-                                    className="w-full aspect-[2/3] rounded-xl object-cover shadow-md" 
+                                    className="w-full aspect-[2/3] rounded-xl object-cover shadow-md"
                                 />
                             ) : (
                                 <div className="w-full aspect-[2/3] rounded-xl bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center text-4xl shadow-sm">
@@ -54,11 +54,10 @@ export default function Show({ buku }) {
 
                             <div className="border-t-2 border-slate-200 pt-6">
                                 <p className="text-slate-600 text-sm font-semibold uppercase">Stok Tersedia</p>
-                                <p className={`text-4xl font-bold mt-2 ${
-                                    buku.stok > 5 ? 'text-green-600' : 
-                                    buku.stok > 0 ? 'text-amber-600' : 
-                                    'text-red-600'
-                                }`}>
+                                <p className={`text-4xl font-bold mt-2 ${buku.stok > 5 ? 'text-green-600' :
+                                    buku.stok > 0 ? 'text-amber-600' :
+                                        'text-red-600'
+                                    }`}>
                                     {buku.stok}
                                 </p>
                             </div>
@@ -70,12 +69,14 @@ export default function Show({ buku }) {
                                 >
                                     Edit
                                 </a>
-                                <button
-                                    onClick={handleDelete}
-                                    className="flex-1 bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition"
-                                >
-                                    Hapus
-                                </button>
+                                {user.role === 'admin' && (
+                                    <button
+                                        onClick={handleDelete}
+                                        className="flex-1 bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition"
+                                    >
+                                        Hapus
+                                    </button>
+                                )}
                                 <Link
                                     href="/bukus"
                                     className="flex-1 text-center bg-slate-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-600 transition"

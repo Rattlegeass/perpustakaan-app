@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Index({ bukus, filters }) {
+export default function Index({ bukus, filters, user }) {
     const [deleteConfirm, setDeleteConfirm] = useState(null);
 
     const handleDelete = (id) => {
@@ -22,12 +22,14 @@ export default function Index({ bukus, filters }) {
                         <h2 className="text-2xl font-bold text-[#0B3A60]">Daftar Buku</h2>
                         <p className="text-slate-500 text-sm mt-1">Total: {bukus.total} buku</p>
                     </div>
-                    <a
-                        href="/bukus/create"
-                        className="px-6 py-2.5 bg-[#0B3A60] text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-md"
-                    >
-                        + Tambah Buku
-                    </a>
+                    {user.role === 'admin' && (
+                        <a
+                            href="/bukus/create"
+                            className="px-6 py-2.5 bg-[#0B3A60] text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+                        >
+                            + Tambah Buku
+                        </a>
+                    )}
                 </div>
 
                 {/* Search Section */}
@@ -78,11 +80,10 @@ export default function Index({ bukus, filters }) {
                                     <td className="px-6 py-4 text-sm text-slate-700">{buku.penerbit}</td>
                                     <td className="px-6 py-4 text-center text-sm text-slate-700">{buku.tahun_terbit}</td>
                                     <td className="px-6 py-4 text-center">
-                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
-                                            buku.stok > 5 ? 'bg-green-100 text-green-800' : 
-                                            buku.stok > 0 ? 'bg-yellow-100 text-yellow-800' : 
-                                            'bg-red-100 text-red-800'
-                                        }`}>
+                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${buku.stok > 5 ? 'bg-green-100 text-green-800' :
+                                            buku.stok > 0 ? 'bg-yellow-100 text-yellow-800' :
+                                                'bg-red-100 text-red-800'
+                                            }`}>
                                             {buku.stok} stok
                                         </span>
                                     </td>
@@ -105,19 +106,23 @@ export default function Index({ bukus, filters }) {
                                             >
                                                 ✏️ Edit
                                             </a>
-                                            <button
-                                                onClick={() => setDeleteConfirm(deleteConfirm === buku.id ? null : buku.id)}
-                                                className="px-3 py-1.5 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
-                                            >
-                                                {deleteConfirm === buku.id ? '❌ Yakin?' : '🗑️ Hapus'}
-                                            </button>
-                                            {deleteConfirm === buku.id && (
-                                                <button
-                                                    onClick={() => handleDelete(buku.id)}
-                                                    className="px-2 py-1.5 bg-red-700 text-white text-xs font-bold rounded-lg"
-                                                >
-                                                    Ya
-                                                </button>
+                                            {user.role === 'admin' && (
+                                                <>
+                                                    <button
+                                                        onClick={() => setDeleteConfirm(deleteConfirm === buku.id ? null : buku.id)}
+                                                        className="px-3 py-1.5 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors"
+                                                    >
+                                                        {deleteConfirm === buku.id ? '❌ Yakin?' : '🗑️ Hapus'}
+                                                    </button>
+                                                    {deleteConfirm === buku.id && (
+                                                        <button
+                                                            onClick={() => handleDelete(buku.id)}
+                                                            className="px-2 py-1.5 bg-red-700 text-white text-xs font-bold rounded-lg"
+                                                        >
+                                                            Ya
+                                                        </button>
+                                                    )}
+                                                </>
                                             )}
                                         </div>
                                     </td>
@@ -141,13 +146,12 @@ export default function Index({ bukus, filters }) {
                                 key={index}
                                 disabled={!link.url}
                                 onClick={() => link.url && router.visit(link.url)}
-                                className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                                    link.active
-                                        ? 'bg-[#0B3A60] text-white'
-                                        : !link.url
+                                className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${link.active
+                                    ? 'bg-[#0B3A60] text-white'
+                                    : !link.url
                                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
                                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                                }`}
+                                    }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
                         ))}
